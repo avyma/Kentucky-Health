@@ -254,7 +254,7 @@
             position: 'topright'
         }));
 
-        var countyLayer = $.getJSON("../data/KY_Cardiac_Chronic_Conditions.geojson", function (data) {
+        var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (data) {
             var dataLayer = L.geoJson(data, {
                 style: function (feature) {
                     return {
@@ -326,7 +326,7 @@
             /*_________________________________________B. Map States ___________________________________________*/
 
             $.when(countyLayer).done(function () {
-                $.getJSON("../data/Kentucky_state_boundary.geojson", function (data) {
+                $.getJSON("data/Kentucky_state_boundary.geojson", function (data) {
 
                     var stateLayer = L.geoJson(data, {
                         style: function (feature) {
