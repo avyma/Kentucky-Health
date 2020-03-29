@@ -156,10 +156,9 @@
             font-size: 1em;
         }
 
-        footer h1 {
+        h1 {
             font-family: Montserrat, sans-serif;
-            letter-spacing: 30px;
-            font-size: 1em;
+            font-size: 2em;
             margin: 0 0 5px 0;
         }
 
@@ -182,11 +181,13 @@
     <div id='footer'>
         <div><img src="https://uky-gis.github.io/graphics/logo-color-400px.png" class="footer-img">
             <h1> CARDIAC-RELATED CHRONIC CONDITIONS PREVALENCE & COSTS - KENTUCKY (2017)</h1>
+
             <br>Data obtained through the Center for Medicare & Medicaid Services (<a
                 href="https://www.cms.gov/">https://www.cms.gov</a>)
             and the US Census Cartographic Boundary Shapefiles
             (<a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html">www.census.gov</a>).
             Map created by THE RIGHT VUE, Spring 2020
+
         </div>
     </div>
 
@@ -253,6 +254,7 @@
         map.addControl(L.control.zoom({
             position: 'topright'
         }));
+
 
         var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (
             data) {
