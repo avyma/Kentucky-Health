@@ -254,7 +254,7 @@
             position: 'topright'
         }));
 
-        var countyLayer = $.getJSON(window.location.href + "/data/KY_Cardiac_Chronic_Conditions.geojson", function (
+        var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (
             data) {
             var dataLayer = L.geoJson(data, {
                 style: function (feature) {
