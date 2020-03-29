@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>US Rental Price</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: rgba(247, 246, 248, 0.9);
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+
+        /*
+        header {
+            width: 80%;
+            margin: 10px auto 10px auto;
+        }
+*/
+
+        /*
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            font-family: Montserrat;
+            letter-spacing: 3px;
+            color: #001323;
+        }
+
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+*/
+        h3 {
+            font-family: Montserrat;
+            letter-spacing: 3px;
+            font-size: 1.2em;
+        }
+
+        #map {
+            width: 100%;
+            top: 0;
+            bottom: 0;
+            /*height: 680px; */
+            position: absolute;
+            /*margin: 10px 10%; */
+            background: rgba(40, 17, 51, 0.9);
+            /*border: 2px solid #dddedf; */
+        }
+
+        a {
+            color: #004A8B;
+        }
+
+        a:hover {
+            color: rgb(67, 69, 71);
+            text-decoration: none;
+        }
+
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+
+        .legend {
+            padding: 6px 8px;
+            font-size: 1em;
+            /* use transparency to blend elements */
+            border: 2px solid rgba(244, 244, 244, 0.2);
+            background: rgba(117, 107, 177, 0.6);
+            color: rgba(244, 244, 244, 0.8);
+            border-radius: 5px;
+        }
+
+        .legend span {
+            width: 40px;
+            height: 20px;
+            float: left;
+            margin: 0 10px 4px 0;
+        }
+
+        .legend label {
+            font-size: 1.1em;
+        }
+
+        /* use :: after pseudo-element to correct float left alignment issues */
+        .legend label::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        .leaflet-bar a {
+            /*override the default style for the Leaflet's zoom */
+            background: rgba(100, 100, 100, 0.9);
+            color: rgba(244, 244, 244, 0.8);
+        }
+
+        #info-button {
+            padding: 8px 5px;
+            font-size: 0.9em;
+            font-weight: bolder;
+            /* Style matches Leaflet controls */
+            border: 2px solid rgba(244, 244, 244, 0.2);
+            background: rgba(100, 100, 100, 0.9);
+            color: rgba(244, 244, 244, 0.8);
+            border-radius: 5px;
+            /* Position is fixed next to the zoom bar */
+            position: fixed;
+            top: 11px;
+            right: 52px;
+            /* Draw it on top of all elements */
+            z-index: 9999;
+            /* Cursor change on hover -- doesn't work on touch screen */
+            cursor: pointer;
+        }
+
+        #footer {
+            width: 100%;
+            background: rgba(244, 244, 244, 0.8);
+            color: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            height: 0px;
+            padding: 0px;
+            /* display below the button to allow clicking if overlay covers scrren */
+            z-index: 9000;
+            position: absolute;
+
+            /* Hide the footer be default. This should not contain too much info.*/
+            /* Like to a new page for extended content. */
+
+            bottom: -10px;
+            /* if too much is included, enable scroll */
+            overflow: scroll;
+        }
+
+        #footer div {
+            padding: 10px;
+            font-size: 1.5em;
+        }
+
+        footer h1 {
+            font-family: Montserrat, sans-serif;
+            letter-spacing: 30px;
+            font-size: 3em;
+            margin: 0 0 5px 0;
+        }
+
+        .footer-img {
+            float: right;
+            height: 10vh;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!--<h1>Map Title</h1> -->
+        <!--<h2>Map Subtitle</h2> -->
+    </header>
+
+    <div id='map'></div>
+    <button id="info-button" onclick="myInfo()">Information</button>
+    <div id='footer'>
+        <div><img src="https://uky-gis.github.io/graphics/logo-color-400px.png" class="footer-img">
+            <h1>MEDIAN RENT BY COUNTIES (2015)</h1>
+            <p>Data obtained through the American Fact Finder (<a
+                    href="http://factfinder.census.gov/">factfinder.census.gov</a>)
+                and the US Census Cartographic Boundary Shapefiles
+                (<a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html">www.census.gov</a>).
+            </p>
+            Map created by THE RIGHT VUE, Spring 2020
+        </div>
+    </div>
+
+    <!--
+    <footer>
+        <p>Map authored by YOUR NAME</p>
+        <p>Additional information about the data and map goes here.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet,
+            dictum
+            ultricies
+            nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu
+            elit.
+            Vestibulum
+            ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum
+            commodo
+            imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer
+            non
+            convallis
+            nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex
+            laoreet
+            a.
+            Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui
+            vehicula
+            at.
+            Mauris eu sem sapien.
+        </p>
+    </footer>
+-->
+    <!-- Load scripts using Subresource Integrity (SRI) is a security feature 
+      that enables browsers to verify that resources they fetch (from a CDN) 
+      are delivered without unexpected manipulation. -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <script src='https://unpkg.com/simple-statistics@7.0.6/dist/simple-statistics.min.js'>
+    </script>
+
+    <script>
+        //$("h1").html("RENTAL CHARACTERISTICS IN THE US")
+        //$("h2").html("MEDIAN RENT BY COUNTIES 2015")
+
+        var options = {
+            zoomSnap: .1,
+            zoomControl: false,
+        }
+
+        var attributeValue = 'RENT',
+
+            map = L.map('map', options);
+
+        map.addControl(L.control.zoom({
+            position: 'topright'
+        }));
+
+        var countyLayer = $.getJSON("../data/KY_Cardiac_Chronic_Conditions.geojson", function (data) {
+            var dataLayer = L.geoJson(data, {
+                style: function (feature) {
+                    return {
+                        color: '#54278f',
+                        weight: 0.3,
+                        fillOpacity: 1,
+                        fillColor: '#1f78b4'
+                    };
+                }
+            })
+
+            //console.log(dataLayer);
+            //console.log(countyLayer);
+
+            var zoomExtent = dataLayer.getBounds()
+            map.fitBounds(zoomExtent, {
+                maxZoom: 8
+            })
+
+            dataLayer.addTo(map)
+            drawMap(dataLayer, "Atrial_Fibrillation_Prev",
+                "Atrial Fibrillation Prevalence"); // calling the drawMap functions
+        });
+
+
+        /******************************** FUNCTION drawMap ***********************************************/
+        // function called from the countyLayer Function above within JQuery environment
+        // Arguments sent: dataLayer, 'RENT', "Median Average Rent" --> Parameters: dataLayer, attributes, popuptext
+        // Call functions: (a) getClassBreaks, (b) drawLegend
+        // Color for class and create Pop-Up
+        // Call drawLegend
+        // Assign color to counties according to Rent Value
+        // Map: A. Counties; B. States
+        /*************************************************************************************************/
+
+        function drawMap(dataLayer, attributes, popuptext) {
+
+
+            /*_________________________________________A. Map Counties ___________________________________________*/
+
+            var breaks = getClassBreaks(dataLayer, attributes); // (a) call getClassBreaks function
+
+            drawLegend(breaks, popuptext); // (b) call drawLegend function
+            //Arguments: breaks - defined in the getClassBreaks function
+            //Arguments: popuptext --> "Median Average Rent"
+
+            dataLayer.eachLayer(function (layer) {
+                var props = layer.feature.properties,
+                    rentValue = props[attributes];
+
+                layer.setStyle({
+                    fillColor: getColor(rentValue, breaks)
+                });
+
+                /*
+                                var usCurrency = {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                    currencyDisplay: "code"
+                                }
+                */
+                layer.bindPopup(
+                    `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(rentValue/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
+                    //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${rentValue}`
+                );
+            });
+
+
+            /*_________________________________________B. Map States ___________________________________________*/
+
+            $.when(countyLayer).done(function () {
+                $.getJSON("../data/Kentucky_state_boundary.geojson", function (data) {
+
+                    var stateLayer = L.geoJson(data, {
+                        style: function (feature) {
+                            return {
+                                color: '#222222',
+                                weight: 3,
+                                fillOpacity: 0,
+                                interactive: false
+                            };
+                        }
+                    });
+                    stateLayer.addTo(map)
+                })
+            })
+
+        }; // ends drawMap Function
+
+
+
+
+        /****************************** FUNCTION getClassBreaks ******************************************/
+        // Use .eachLayer (Leaflet) loop through all the counties
+        // Get RENT data attributes and store in new array values
+        /*************************************************************************************************/
+
+        function getClassBreaks(dataLayer, attributes) {
+
+            /*___________________________ A. Create Array of Rents Values ___________________________*/
+            // var values - empty array to hold all values from dataLayer (layer.feature.properties)
+            // loop through datalayer using Leaflet method .eachLayer
+            // var value - Rent value each layer (county)
+            // push value (i.e. layer.feature.properties.RENT) to array "values"
+            // IF value (RENT) is NOT "NULL"
+
+            var values = [];
+            dataLayer.eachLayer(function (layer) {
+                var props = layer.feature.properties; // shorthand reference to properties
+                var value = props[attributes];
+                if (value != null) {
+                    values.push(Number(value));
+                }
+            });
+
+            //console.log(values) // + + + + + console.log() + + + + +
+
+            /*___________________________B. Define & Classify Clusters_______________________________*/
+            // var clusters - access Simple Statistics library and deploy the ckmeans methods
+            // Link to Simple Statistics ckmeans: https://simplestatistics.org/docs/#ckmeans
+            // creates an array with 5 arrays that group all similar values (ss.ckmeans(values, 5))
+            // Arguments: values (line xxx); "5" - number classification breaks within array "values"
+
+            var clusters = ss.ckmeans(values, 5),
+                breaks = clusters.map(function (cluster) {
+                    return [cluster[0], cluster.pop()];
+                });
+            //console.log(clusters); // + + + + + console.log() + + + + +
+            //console.log(breaks); // + + + + + console.log() + + + + +
+            return breaks; // to function drawMap (line xxx)
+
+        } // end getClassBreaks Function
+
+
+        /****************************** FUNCTION getColor ******************************************/
+        // Color Theme:  https://colorbrewer2.org/#type=sequential&scheme=Purples&n=5
+        // Colors: #f2f0f7; #cbc9e2; #9e9ac8; #756bb1; #54278f
+        // 
+        /*************************************************************************************************/
+
+        function getColor(d, breaks) {
+            if (d <= breaks[0][1]) { // high range of the first class
+                return '#f2f0f7';
+
+            } else if (d <= breaks[1][1]) { // high range of the 2nd class
+                return '#cbc9e2';
+
+            } else if (d <= breaks[2][1]) { // high range of the 3rd class
+                return '#9e9ac8';
+
+            } else if (d <= breaks[3][1]) {
+                return '#756bb1';
+
+            } else if (d <= breaks[4][1]) {
+                return '#54278f';
+            }
+        } // end getColor Function
+
+
+        /****************************** FUNCTION drawLegend ******************************************/
+        // Define Leaflet L.control position (legend) to be 'topleft'
+        // Add legend by .onAdd method:
+        //      - Use Leaflet L.DomUtil.create to create:
+        //           a) new DOM <div> element
+        //           b) class: legend - for CSS styling
+        //      - Store <div> and legend class in var = div
+        //      - Assign colors to breaks (assign color to break value - lower range of each cluster)
+        /*************************************************************************************************/
+
+        function drawLegend(breaks, popuptext) {
+
+            var legend = L.control({
+                position: 'topright'
+            });
+
+            legend.onAdd = function () { // add legend
+                var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
+                div.innerHTML = `<h3> ${popuptext} </h3>`; // Title of Legend
+
+
+                /*___________________________ A. ASSIGN COLORS TO RENT DATA CLASS BREAKS ___________________________*/
+                // Use "for loop" to assign colors to each break value (lower range value)
+                // Call Function getColor to assign appropriate and consistent color:
+                //      Parameters: breaks[i][0] - lower range of each class breaks
+                //                  breaks - array layers ---> 5 breaks
+
+                for (var i = 0; i < breaks.length; i++) {
+                    var color = getColor(breaks[i][0], breaks); // color acquired from getColor function
+
+                    console.log(color); // + + + + + console.log() + + + + +
+
+                    div.innerHTML +=
+                        `<span style="background:${color}"></span>
+          <label>${breaks[i][0].toLocaleString()}&mdash;
+            ${breaks[i][1].toLocaleString()}</label>`;
+                }
+
+                return div; // return div element
+
+            }; // end of .onAdd
+
+            legend.addTo(map); // add legend to map
+
+        } // end of drawLegend Function
+
+
+        /****************************** FUNCTION myInfo ***************************************************/
+        // 
+        /*************************************************************************************************/
+
+        var clicked = false
+
+        function myInfo() {
+
+            var x = document.getElementById('footer');
+            var y = document.getElementById('info-button');
+
+            if (clicked) {
+                y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
+                x.style.height = '0px'; // no footer height
+
+            } else {
+                y.style.background = 'rgba(158, 154, 200, 0.8)'; // purple button
+                x.style.height = '33vh'; // footer 33% of viewport height
+            }
+            clicked = !clicked
+        } // end of myInfo Function
+    </script>
+
+</body>
+
+</html>
