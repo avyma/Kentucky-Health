@@ -228,8 +228,8 @@
     </script>
 
     <script>
-        //$("h1").html("RENTAL CHARACTERISTICS IN THE US")
-        //$("h2").html("MEDIAN RENT BY COUNTIES 2015")
+        //$("h1").html("")
+        //$("h2").html("")
 
         var options = {
             zoomSnap: .1,
@@ -238,7 +238,12 @@
 
         map = L.map('map', options);
 
-        // Get basemap URL from Leaflet Providers
+
+        /******************************** GET BASEMAP ***********************************************/
+        /*  L.control.Zoom  --- Zoom
+        /*  Position --- topright
+        /********************************************************************************************/
+
         var basemap_url = 'http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
 
         // Get basemap attributes from Leaflet Providers
@@ -285,11 +290,11 @@
 
         /******************************** FUNCTION drawMap ***********************************************/
         // function called from the countyLayer Function above within JQuery environment
-        // Arguments sent: dataLayer, 'RENT', "Median Average Rent" --> Parameters: dataLayer, attributes, popuptext
+        // Arguments sent: dataLayer, 'Atrial_Fibrillation_Prev' (a type of heart condition), String: "Atrial Fibrillation Prevalence" --> Parameters: dataLayer, attributes, popuptext
         // Call functions: (a) getClassBreaks, (b) drawLegend
         // Color for class and create Pop-Up
         // Call drawLegend
-        // Assign color to counties according to Rent Value
+        // Assign color to counties according to Prevalence of Atrial Fibrilation
         // Map: A. Counties; B. States
         /*************************************************************************************************/
 
@@ -306,10 +311,10 @@
 
             dataLayer.eachLayer(function (layer) {
                 var props = layer.feature.properties,
-                    rentValue = props[attributes];
+                    cardiacPrev = props[attributes];
 
                 layer.setStyle({
-                    fillColor: getColor(rentValue, breaks)
+                    fillColor: getColor(cardiacPrev, breaks)
                 });
 
                 /*
@@ -320,8 +325,8 @@
                                 }
                 */
                 layer.bindPopup(
-                    `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(rentValue/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
-                    //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${rentValue}`
+                    `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
+                    //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${cardiacPrev}`
                 );
             });
 
@@ -357,24 +362,17 @@
 
         function getClassBreaks(dataLayer, attributes) {
 
-            /*___________________________ A. Create Array of Rents Values ___________________________*/
+            /*___________________________ A. Create Array of Cardiac Prevalence ___________________________*/
             // var values - empty array to hold all values from dataLayer (layer.feature.properties)
             // loop through datalayer using Leaflet method .eachLayer
-            // var value - Rent value each layer (county)
-            // push value (i.e. layer.feature.properties.RENT) to array "values"
-            // IF value (RENT) is NOT "NULL"
+            // var value - Prevalence of Atrial Fibrillation each layer (county)
+            // push value (i.e. layer.feature.properties.Atrial_Fibrillation_Prev) to array "values"
 
             var values = [];
             dataLayer.eachLayer(function (layer) {
                 var props = layer.feature.properties; // shorthand reference to properties
                 var value = props[attributes];
                 values.push(Number(value));
-
-                /* Test for 'null' value
-                if (value != null) { 
-                values.push(Number(value));  
-                }
-                */
             });
 
             //console.log(values) // + + + + + console.log() + + + + +
@@ -398,7 +396,7 @@
 
         /****************************** FUNCTION getColor ******************************************/
         // Color Theme:  https://colorbrewer2.org/#type=sequential&scheme=Purples&n=5
-        // Colors: #f2f0f7; #cbc9e2; #9e9ac8; #756bb1; #54278f
+        // Color theme:  5-class; single-hue; red
         // 
         /*************************************************************************************************/
 
@@ -484,7 +482,7 @@
                 x.style.height = '0px'; // no footer height
 
             } else {
-                y.style.background = 'rgba(158, 154, 200, 0.8)'; // purple button
+                y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
                 x.style.height = '33vh'; // footer 33% of viewport height
             }
             clicked = !clicked
