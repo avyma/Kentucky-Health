@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
-    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 
     <style>
         body {
@@ -254,7 +254,7 @@
             position: 'topright'
         }));
 
-        var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (data) {
+        var countyLayer = $.getJSON("/data/KY_Cardiac_Chronic_Conditions.geojson", function (data) {
             var dataLayer = L.geoJson(data, {
                 style: function (feature) {
                     return {
