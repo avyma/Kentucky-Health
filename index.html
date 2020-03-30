@@ -50,13 +50,23 @@
 
         #map {
             width: 100%;
-            top: 0;
-            bottom: 0;
-            /*height: 680px; */
+            top: 12%;
+            /*bottom: 0; */
+            height: 680px;
             position: absolute;
-            /*margin: 10px 10%; */
-            /*background: rgba(85, 30, 5, 0.8);*/
-            /*border: 2px solid #dddedf; */
+            /*margin: 10px*/
+            background: rgba(253, 117, 54, 0.8);
+            border: 2px solid #dddedf;
+        }
+
+        #theList {
+            height: 700px;
+            padding: 0 20px 0 20px;
+        }
+
+        #theList div {
+            float: left;
+            width: 200px;
         }
 
         a {
@@ -73,6 +83,7 @@
             width: 80%;
         }
 
+
         p {
             font-size: 1em;
             color: #001323;
@@ -86,7 +97,7 @@
             background: rgba(247, 240, 236, 0.8);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             color: rgba(100, 100, 100, 1);
-            border-radius: 5px;
+            border-radius: 3px;
         }
 
         .legend span {
@@ -124,7 +135,7 @@
             border-radius: 5px;
             /* Position is fixed next to the zoom bar */
             position: fixed;
-            top: 11px;
+            top: 16%;
             right: 52px;
             /* Draw it on top of all elements */
             z-index: 9999;
@@ -134,6 +145,7 @@
 
         #footer {
             width: 100%;
+            margin: 10px 10px;
             background: rgba(244, 244, 244, 0.8);
             color: rgba(20, 20, 20, 0.8);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -342,7 +354,7 @@
                     var stateLayer = L.geoJson(data, {
                         style: function (feature) {
                             return {
-                                color: '#222222',
+                                color: '#813002',
                                 weight: 2,
                                 fillOpacity: 0,
                                 interactive: false
@@ -486,7 +498,7 @@
 
             } else {
                 y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
-                x.style.height = '33vh'; // footer 33% of viewport height
+                x.style.height = '20vh'; // footer 33% of viewport height
             }
             clicked = !clicked
         } // end of myInfo Function
