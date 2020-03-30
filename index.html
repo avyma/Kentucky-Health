@@ -21,12 +21,25 @@
             color: #0D0000;
         }
 
-        /*
+
         header {
-            width: 80%;
-            margin: 10px auto 10px auto;
+            top: 400px;
+            width: 100%;
+            margin: 80px auto 10px auto;
         }
-*/
+
+        select {
+            margin-left: 15px;
+            width: 260px;
+
+        }
+
+        optgroup {
+            font-family: Montserrat;
+            color: rgba(20, 20, 20, 0.8);
+            text-decoration: none;
+            text-emphasis: none;
+        }
 
         /*
         h1 {
@@ -52,8 +65,8 @@
             width: 100%;
             top: 12%;
             /*bottom: 0; */
-            height: 680px;
-            position: absolute;
+            height: 720px;
+            /*position: absolute;*/
             /*margin: 10px*/
             background: rgba(253, 117, 54, 0.8);
             border: 2px solid #dddedf;
@@ -135,8 +148,8 @@
             border-radius: 5px;
             /* Position is fixed next to the zoom bar */
             position: fixed;
-            top: 150px;
-            right: 52px;
+            top: 5px;
+            left: 93%;
             /* Draw it on top of all elements */
             z-index: 9999;
             /* Cursor change on hover -- doesn't work on touch screen */
@@ -184,27 +197,46 @@
 
 <body>
     <header>
+        <button id="info-button" onclick="myInfo()">Information</button>
         <!--<h1>Map Title</h1> -->
         <!--<h2>Map Subtitle</h2> -->
-    </header>
+        <!--<label for="chronic disease">Choose a chronic disease:</label>-->
+        <select name="Select A Chronic Disease" id="chonicdisease">
+            <option value=""></option>
+            <optgroup label="Atrial Fibrillation">
+                <option value="dPr">Prevalence</option>
+                <option value="dcPc">Cost Per Capita</option>
+            </optgroup>
+            <optgroup label="Heart Failure">
+                <option value="hPr">Prevalence</option>
+                <option value="hcPc">Cost Per Capita</option>
+            </optgroup>
+        </select>
 
-    <div id='map'></div>
-    <button id="info-button" onclick="myInfo()">Information</button>
-    <div id='footer'>
-        <div><img src="https://uky-gis.github.io/graphics/logo-color-400px.png" class="footer-img">
-            <h1> CARDIAC-RELATED CHRONIC CONDITIONS PREVALENCE & COSTS - KENTUCKY (2017)</h1>
+</body>
 
-            <br>Data obtained through the Center for Medicare & Medicaid Services (<a
-                href="https://www.cms.gov/">https://www.cms.gov</a>)
-            and the US Census Cartographic Boundary Shapefiles
-            (<a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html">www.census.gov</a>).
-            Map created by THE RIGHT VUE, Spring 2020
+</html>
 
-        </div>
+</select>
+</header>
+
+<div id='map'></div>
+
+<div id='footer'>
+    <div><img src="https://uky-gis.github.io/graphics/logo-color-400px.png" class="footer-img">
+        <h1> CARDIAC-RELATED CHRONIC CONDITIONS PREVALENCE & COSTS - KENTUCKY (2017)</h1>
+
+        <br>Data obtained through the Center for Medicare & Medicaid Services (<a
+            href="https://www.cms.gov/">https://www.cms.gov</a>)
+        and the US Census Cartographic Boundary Shapefiles
+        (<a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html">www.census.gov</a>).
+        Map created by THE RIGHT VUE, Spring 2020
+
     </div>
+</div>
 
-    <!--
-    <footer>
+<footer>
+    <div id="theList">
         <p>Map authored by YOUR NAME</p>
         <p>Additional information about the data and map goes here.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet,
@@ -226,283 +258,284 @@
             at.
             Mauris eu sem sapien.
         </p>
-    </footer>
+    </div>
+</footer>
 -->
-    <!-- Load scripts using Subresource Integrity (SRI) is a security feature 
+<!-- Load scripts using Subresource Integrity (SRI) is a security feature 
       that enables browsers to verify that resources they fetch (from a CDN) 
       are delivered without unexpected manipulation. -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-        crossorigin=""></script>
-    <script src='https://unpkg.com/simple-statistics@7.0.6/dist/simple-statistics.min.js'>
-    </script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+<script src='https://unpkg.com/simple-statistics@7.0.6/dist/simple-statistics.min.js'>
+</script>
 
-    <script>
-        //$("h1").html("")
-        //$("h2").html("")
+<script>
+    //$("h1").html("")
+    //$("h2").html("")
 
-        var options = {
-            zoomSnap: .1,
-            zoomControl: false,
-        }
+    var options = {
+        zoomSnap: .1,
+        zoomControl: false,
+    }
 
-        map = L.map('map', options);
-
-
-        /******************************** GET BASEMAP ***********************************************/
-        /*  L.control.Zoom  --- Zoom
-        /*  Position --- topright
-        /********************************************************************************************/
-
-        var basemap_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
-
-        // Get basemap attributes from Leaflet Providers
-        var basemap_attributes = {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 10
-        };
+    map = L.map('map', options);
 
 
-        // requests some map tiles
-        var tiles = L.tileLayer(basemap_url, basemap_attributes);
+    /******************************** GET BASEMAP ***********************************************/
+    /*  L.control.Zoom  --- Zoom
+    /*  Position --- topright
+    /********************************************************************************************/
 
-        map.addLayer(tiles);
+    var basemap_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
 
-        map.addControl(L.control.zoom({
-            position: 'topright'
-        }));
+    // Get basemap attributes from Leaflet Providers
+    var basemap_attributes = {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 10
+    };
 
 
-        var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (
-            data) {
-            var dataLayer = L.geoJson(data, {
-                style: function (feature) {
-                    return {
-                        color: '#54278f',
-                        weight: 0.3,
-                        fillOpacity: 0.8,
-                        fillColor: '#1f78b4'
-                    };
-                }
-            })
+    // requests some map tiles
+    var tiles = L.tileLayer(basemap_url, basemap_attributes);
 
-            //console.log(dataLayer);
-            //console.log(countyLayer);
+    map.addLayer(tiles);
 
-            var zoomExtent = dataLayer.getBounds()
-            map.fitBounds(zoomExtent, {
-                maxZoom: 7.7
-            })
+    map.addControl(L.control.zoom({
+        position: 'topright'
+    }));
 
-            dataLayer.addTo(map)
-            drawMap(dataLayer, "Atrial_Fibrillation_Prev",
-                "Atrial Fibrillation Prevalence"); // calling the drawMap functions
+
+    var countyLayer = $.getJSON("data/KY_Cardiac_Chronic_Conditions.geojson", function (
+        data) {
+        var dataLayer = L.geoJson(data, {
+            style: function (feature) {
+                return {
+                    color: '#54278f',
+                    weight: 0.3,
+                    fillOpacity: 0.8,
+                    fillColor: '#1f78b4'
+                };
+            }
+        })
+
+        //console.log(dataLayer);
+        //console.log(countyLayer);
+
+        var zoomExtent = dataLayer.getBounds()
+        map.fitBounds(zoomExtent, {
+            maxZoom: 7.7
+        })
+
+        dataLayer.addTo(map)
+        drawMap(dataLayer, "Atrial_Fibrillation_Prev",
+            "Atrial Fibrillation Prevalence"); // calling the drawMap functions
+    });
+
+
+    /******************************** FUNCTION drawMap ***********************************************/
+    // function called from the countyLayer Function above within JQuery environment
+    // Arguments sent: dataLayer, 'Atrial_Fibrillation_Prev' (a type of heart condition), String: "Atrial Fibrillation Prevalence" --> Parameters: dataLayer, attributes, popuptext
+    // Call functions: (a) getClassBreaks, (b) drawLegend
+    // Color for class and create Pop-Up
+    // Call drawLegend
+    // Assign color to counties according to Prevalence of Atrial Fibrilation
+    // Map: A. Counties; B. States
+    /*************************************************************************************************/
+
+    function drawMap(dataLayer, attributes, popuptext) {
+
+
+        /*_________________________________________A. Map Counties ___________________________________________*/
+
+        var breaks = getClassBreaks(dataLayer, attributes); // (a) call getClassBreaks function
+
+        drawLegend(breaks, popuptext); // (b) call drawLegend function
+        //Arguments: breaks - defined in the getClassBreaks function
+        //Arguments: popuptext --> "Median Average Rent"
+
+        dataLayer.eachLayer(function (layer) {
+            var props = layer.feature.properties,
+                cardiacPrev = props[attributes];
+
+            layer.setStyle({
+                fillColor: getColor(cardiacPrev, breaks)
+            });
+
+            /*
+                            var usCurrency = {
+                                style: 'currency',
+                                currency: 'USD',
+                                currencyDisplay: "code"
+                            }
+            */
+            layer.bindPopup(
+                `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
+                //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${cardiacPrev}`
+            );
         });
 
 
-        /******************************** FUNCTION drawMap ***********************************************/
-        // function called from the countyLayer Function above within JQuery environment
-        // Arguments sent: dataLayer, 'Atrial_Fibrillation_Prev' (a type of heart condition), String: "Atrial Fibrillation Prevalence" --> Parameters: dataLayer, attributes, popuptext
-        // Call functions: (a) getClassBreaks, (b) drawLegend
-        // Color for class and create Pop-Up
-        // Call drawLegend
-        // Assign color to counties according to Prevalence of Atrial Fibrilation
-        // Map: A. Counties; B. States
-        /*************************************************************************************************/
+        /*_________________________________________B. Map States ___________________________________________*/
 
-        function drawMap(dataLayer, attributes, popuptext) {
+        $.when(countyLayer).done(function () {
+            $.getJSON("data/Kentucky_state_boundary.geojson", function (data) {
 
-
-            /*_________________________________________A. Map Counties ___________________________________________*/
-
-            var breaks = getClassBreaks(dataLayer, attributes); // (a) call getClassBreaks function
-
-            drawLegend(breaks, popuptext); // (b) call drawLegend function
-            //Arguments: breaks - defined in the getClassBreaks function
-            //Arguments: popuptext --> "Median Average Rent"
-
-            dataLayer.eachLayer(function (layer) {
-                var props = layer.feature.properties,
-                    cardiacPrev = props[attributes];
-
-                layer.setStyle({
-                    fillColor: getColor(cardiacPrev, breaks)
+                var stateLayer = L.geoJson(data, {
+                    style: function (feature) {
+                        return {
+                            color: '#813002',
+                            weight: 2,
+                            fillOpacity: 0,
+                            interactive: false
+                        };
+                    }
                 });
-
-                /*
-                                var usCurrency = {
-                                    style: 'currency',
-                                    currency: 'USD',
-                                    currencyDisplay: "code"
-                                }
-                */
-                layer.bindPopup(
-                    `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
-                    //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${cardiacPrev}`
-                );
-            });
-
-
-            /*_________________________________________B. Map States ___________________________________________*/
-
-            $.when(countyLayer).done(function () {
-                $.getJSON("data/Kentucky_state_boundary.geojson", function (data) {
-
-                    var stateLayer = L.geoJson(data, {
-                        style: function (feature) {
-                            return {
-                                color: '#813002',
-                                weight: 2,
-                                fillOpacity: 0,
-                                interactive: false
-                            };
-                        }
-                    });
-                    stateLayer.addTo(map)
-                })
+                stateLayer.addTo(map)
             })
+        })
 
-        }; // ends drawMap Function
+    }; // ends drawMap Function
 
 
 
 
-        /****************************** FUNCTION getClassBreaks ******************************************/
-        // Use .eachLayer (Leaflet) loop through all the counties
-        // Get RENT data attributes and store in new array values
-        /*************************************************************************************************/
+    /****************************** FUNCTION getClassBreaks ******************************************/
+    // Use .eachLayer (Leaflet) loop through all the counties
+    // Get RENT data attributes and store in new array values
+    /*************************************************************************************************/
 
-        function getClassBreaks(dataLayer, attributes) {
+    function getClassBreaks(dataLayer, attributes) {
 
-            /*___________________________ A. Create Array of Cardiac Prevalence ___________________________*/
-            // var values - empty array to hold all values from dataLayer (layer.feature.properties)
-            // loop through datalayer using Leaflet method .eachLayer
-            // var value - Prevalence of Atrial Fibrillation each layer (county)
-            // push value (i.e. layer.feature.properties.Atrial_Fibrillation_Prev) to array "values"
+        /*___________________________ A. Create Array of Cardiac Prevalence ___________________________*/
+        // var values - empty array to hold all values from dataLayer (layer.feature.properties)
+        // loop through datalayer using Leaflet method .eachLayer
+        // var value - Prevalence of Atrial Fibrillation each layer (county)
+        // push value (i.e. layer.feature.properties.Atrial_Fibrillation_Prev) to array "values"
 
-            var values = [];
-            dataLayer.eachLayer(function (layer) {
-                var props = layer.feature.properties; // shorthand reference to properties
-                var value = props[attributes];
-                values.push(Number(value));
+        var values = [];
+        dataLayer.eachLayer(function (layer) {
+            var props = layer.feature.properties; // shorthand reference to properties
+            var value = props[attributes];
+            values.push(Number(value));
+        });
+
+        //console.log(values) // + + + + + console.log() + + + + +
+
+        /*___________________________B. Define & Classify Clusters_______________________________*/
+        // var clusters - access Simple Statistics library and deploy the ckmeans methods
+        // Link to Simple Statistics ckmeans: https://simplestatistics.org/docs/#ckmeans
+        // creates an array with 5 arrays that group all similar values (ss.ckmeans(values, 5))
+        // Arguments: values (line xxx); "5" - number classification breaks within array "values"
+
+        var clusters = ss.ckmeans(values, 5),
+            breaks = clusters.map(function (cluster) {
+                return [cluster[0], cluster.pop()];
             });
+        console.log(clusters); // + + + + + console.log() + + + + +
+        //console.log(breaks); // + + + + + console.log() + + + + +
+        return breaks; // to function drawMap (line xxx)
 
-            //console.log(values) // + + + + + console.log() + + + + +
-
-            /*___________________________B. Define & Classify Clusters_______________________________*/
-            // var clusters - access Simple Statistics library and deploy the ckmeans methods
-            // Link to Simple Statistics ckmeans: https://simplestatistics.org/docs/#ckmeans
-            // creates an array with 5 arrays that group all similar values (ss.ckmeans(values, 5))
-            // Arguments: values (line xxx); "5" - number classification breaks within array "values"
-
-            var clusters = ss.ckmeans(values, 5),
-                breaks = clusters.map(function (cluster) {
-                    return [cluster[0], cluster.pop()];
-                });
-            console.log(clusters); // + + + + + console.log() + + + + +
-            //console.log(breaks); // + + + + + console.log() + + + + +
-            return breaks; // to function drawMap (line xxx)
-
-        } // end getClassBreaks Function
+    } // end getClassBreaks Function
 
 
-        /****************************** FUNCTION getColor ******************************************/
-        // Color Theme:  https://colorbrewer2.org/#type=sequential&scheme=Purples&n=5
-        // Color theme:  5-class; single-hue; red
-        // 
-        /*************************************************************************************************/
+    /****************************** FUNCTION getColor ******************************************/
+    // Color Theme:  https://colorbrewer2.org/#type=sequential&scheme=Purples&n=5
+    // Color theme:  5-class; single-hue; red
+    // 
+    /*************************************************************************************************/
 
-        function getColor(d, breaks) {
-            if (d <= breaks[0][1]) { // high range of the first class
-                return '#fee5d9';
+    function getColor(d, breaks) {
+        if (d <= breaks[0][1]) { // high range of the first class
+            return '#fee5d9';
 
-            } else if (d <= breaks[1][1]) { // high range of the 2nd class
-                return '#fcae91';
+        } else if (d <= breaks[1][1]) { // high range of the 2nd class
+            return '#fcae91';
 
-            } else if (d <= breaks[2][1]) { // high range of the 3rd class
-                return '#fb6a4a';
+        } else if (d <= breaks[2][1]) { // high range of the 3rd class
+            return '#fb6a4a';
 
-            } else if (d <= breaks[3][1]) {
-                return '#de2d26';
+        } else if (d <= breaks[3][1]) {
+            return '#de2d26';
 
-            } else if (d <= breaks[4][1]) {
-                return '#a50f15';
-            }
-        } // end getColor Function
-
-
-        /****************************** FUNCTION drawLegend ******************************************/
-        // Define Leaflet L.control position (legend) to be 'topleft'
-        // Add legend by .onAdd method:
-        //      - Use Leaflet L.DomUtil.create to create:
-        //           a) new DOM <div> element
-        //           b) class: legend - for CSS styling
-        //      - Store <div> and legend class in var = div
-        //      - Assign colors to breaks (assign color to break value - lower range of each cluster)
-        /*************************************************************************************************/
-
-        function drawLegend(breaks, popuptext) {
-
-            var legend = L.control({
-                position: 'topright'
-            });
-
-            legend.onAdd = function () { // add legend
-                var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
-                div.innerHTML = `<h3> ${popuptext} </h3>`; // Title of Legend
+        } else if (d <= breaks[4][1]) {
+            return '#a50f15';
+        }
+    } // end getColor Function
 
 
-                /*___________________________ A. ASSIGN COLORS TO RENT DATA CLASS BREAKS ___________________________*/
-                // Use "for loop" to assign colors to each break value (lower range value)
-                // Call Function getColor to assign appropriate and consistent color:
-                //      Parameters: breaks[i][0] - lower range of each class breaks
-                //                  breaks - array layers ---> 5 breaks
+    /****************************** FUNCTION drawLegend ******************************************/
+    // Define Leaflet L.control position (legend) to be 'topleft'
+    // Add legend by .onAdd method:
+    //      - Use Leaflet L.DomUtil.create to create:
+    //           a) new DOM <div> element
+    //           b) class: legend - for CSS styling
+    //      - Store <div> and legend class in var = div
+    //      - Assign colors to breaks (assign color to break value - lower range of each cluster)
+    /*************************************************************************************************/
 
-                for (var i = 0; i < breaks.length; i++) {
-                    var color = getColor(breaks[i][0], breaks); // color acquired from getColor function
+    function drawLegend(breaks, popuptext) {
 
-                    console.log(color); // + + + + + console.log() + + + + +
+        var legend = L.control({
+            position: 'topright'
+        });
 
-                    div.innerHTML +=
-                        `<span style="background:${color}"></span>
+        legend.onAdd = function () { // add legend
+            var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
+            div.innerHTML = `<h3> ${popuptext} </h3>`; // Title of Legend
+
+
+            /*___________________________ A. ASSIGN COLORS TO RENT DATA CLASS BREAKS ___________________________*/
+            // Use "for loop" to assign colors to each break value (lower range value)
+            // Call Function getColor to assign appropriate and consistent color:
+            //      Parameters: breaks[i][0] - lower range of each class breaks
+            //                  breaks - array layers ---> 5 breaks
+
+            for (var i = 0; i < breaks.length; i++) {
+                var color = getColor(breaks[i][0], breaks); // color acquired from getColor function
+
+                console.log(color); // + + + + + console.log() + + + + +
+
+                div.innerHTML +=
+                    `<span style="background:${color}"></span>
           <label>${breaks[i][0].toLocaleString()}&mdash;
             ${breaks[i][1].toLocaleString()}</label>`;
-                }
-
-                return div; // return div element
-
-            }; // end of .onAdd
-
-            legend.addTo(map); // add legend to map
-
-        } // end of drawLegend Function
-
-
-        /****************************** FUNCTION myInfo ***************************************************/
-        // 
-        /*************************************************************************************************/
-
-        var clicked = false
-
-        function myInfo() {
-
-            var x = document.getElementById('footer');
-            var y = document.getElementById('info-button');
-
-            if (clicked) {
-                y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
-                x.style.height = '0px'; // no footer height
-
-            } else {
-                y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
-                x.style.height = '20vh'; // footer 33% of viewport height
             }
-            clicked = !clicked
-        } // end of myInfo Function
-    </script>
+
+            return div; // return div element
+
+        }; // end of .onAdd
+
+        legend.addTo(map); // add legend to map
+
+    } // end of drawLegend Function
+
+
+    /****************************** FUNCTION myInfo ***************************************************/
+    // 
+    /*************************************************************************************************/
+
+    var clicked = false
+
+    function myInfo() {
+
+        var x = document.getElementById('footer');
+        var y = document.getElementById('info-button');
+
+        if (clicked) {
+            y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
+            x.style.height = '0px'; // no footer height
+
+        } else {
+            y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
+            x.style.height = '20vh'; // footer 33% of viewport height
+        }
+        clicked = !clicked
+    } // end of myInfo Function
+</script>
 
 </body>
 
