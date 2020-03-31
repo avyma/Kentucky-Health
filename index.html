@@ -235,32 +235,20 @@
     </div>
 </div>
 
+<!-----------------------------------------------  CREATE 5 COLUMNS   --------------------------------------------------->
 <footer>
     <div id="theList">
-        <p>Map authored by YOUR NAME</p>
-        <p>Additional information about the data and map goes here.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet,
-            dictum
-            ultricies
-            nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu
-            elit.
-            Vestibulum
-            ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum
-            commodo
-            imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer
-            non
-            convallis
-            nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex
-            laoreet
-            a.
-            Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui
-            vehicula
-            at.
-            Mauris eu sem sapien.
-        </p>
+
+        <div></div> <!-- first child (position 0) similar to arrays -->
+        <div></div> <!-- second child (position 1) similar to arrays -->
+        <div></div> <!-- ...and so on -->
+        <div></div>
+        <div></div>
+
     </div>
 </footer>
--->
+
+
 <!-- Load scripts using Subresource Integrity (SRI) is a security feature 
       that enables browsers to verify that resources they fetch (from a CDN) 
       are delivered without unexpected manipulation. -->
@@ -276,6 +264,15 @@
     //$("h1").html("")
     //$("h2").html("")
 
+
+    /******************************* DECLARE GLOBAL VARIABLES FOR SELECTION ************************/
+
+    /*var legendDiv,
+    settingsDrawMap,
+    optionsAnalysis: {
+
+    }*/
+
     var options = {
         zoomSnap: .1,
         zoomControl: false,
@@ -286,7 +283,7 @@
 
     /******************************** GET BASEMAP ***********************************************/
     /*  L.control.Zoom  --- Zoom
-    /*  Position --- topright
+    /*  Position --- bottomright
     /********************************************************************************************/
 
     var basemap_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
@@ -305,7 +302,7 @@
     map.addLayer(tiles);
 
     map.addControl(L.control.zoom({
-        position: 'topright'
+        position: 'bottomright'
     }));
 
 
