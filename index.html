@@ -202,14 +202,25 @@
         <!--<h2>Map Subtitle</h2> -->
         <!--<label for="chronic disease">Choose a chronic disease:</label>-->
         <select name="Select A Chronic Disease" id="chonicdisease">
+            <!--blank -->
             <option value=""></option>
+
+            <!--Atrial Fibrillation Group -->
             <optgroup label="Atrial Fibrillation">
-                <option value="dPr">Prevalence</option>
-                <option value="dcPc">Cost Per Capita</option>
+                <option value="afPrev">Prevalence</option>
+                <option value="afExp">Cost Per Capita</option>
             </optgroup>
+
+            <!-- Heart Failure Group -->
             <optgroup label="Heart Failure">
-                <option value="hPr">Prevalence</option>
-                <option value="hcPc">Cost Per Capita</option>
+                <option value="hfPrev">Prevalence</option>
+                <option value="hfExp">Cost Per Capita</option>
+            </optgroup>
+
+            <!-- Ischemic Heart Disease Group-->
+            <optgroup label="Ischemic Heart Disease">
+                <option value="ihdPrev">Prevalence</option>
+                <option value="ihdExp">Cost Per Capita</option>
             </optgroup>
         </select>
 
@@ -265,13 +276,86 @@
     //$("h2").html("")
 
 
-    /******************************* DECLARE GLOBAL VARIABLES FOR SELECTION ************************/
+    /************************************** DECLARE GLOBAL VARIABLES FOR SELECTION ****************************************/
+    /*                                                                                                                    */
+    /*   afPrevOption - option for user to select map of Atrial Fribrillation Prevalence                                  */
+    /*                - Key within the optionsAnalysis object containing: value, calc, symb, avgKY, avgUS, text, and cat  */
+    /*                - 1 of GeoJSON layer if selected                                                                    */
+    /*   value - property to test for user-select item                                                                    */
+    /*   calc - variable called from external data representing the item to be mapp                                       */
+    /*   symb - to be used as part of popup subject to prevalence or expenditure map items                                */
+    /*   avgKY - average for Kentucky - to be used to measure and compare values per KY counties                          */
+    /*   avgUS - average for US - to be used to measure and compare values per KY counties                                */
+    /*   text - popup text                                                                                                */
+    /*   cat - category: prevalence or expenditure facilitate formatting of popup                                         */
+    /*                                                                                                                    */
+    /**********************************************************************************************************************/
 
-    /*var legendDiv,
-    settingsDrawMap,
-    optionsAnalysis: {
 
-    }*/
+    var legendDiv,
+        settingsDrawMap,
+        optionsAnalysis = {
+            "afPrevOption": { // Atrial Fibrillation
+                "value": "afPrev", // Prevalence
+                "calc": "Atrial_Fibrillation_Prev",
+                "symb": "%",
+                "avgKY": "8.4",
+                "avgUS": "8.4",
+                "text": " prevalence (Atrial Fibrillation)",
+                "cat": "prevalence"
+            },
+
+            "afExpOption": { // Atrial Fibrillation
+                "value": "afExp", // Expenditure
+                "calc": "Atrial_Fibrillation_Exp",
+                "symb": "$",
+                "avgKY": "24714.9",
+                "avgUS": "26210.3",
+                "text": " per capita (Atrial Fibrillation)",
+                "cat": "expenditure"
+            },
+
+            "hfPrevOption": { // Heart Failure
+                "value": "hfPrev", // Prevalence
+                "calc": "Heart_Failure_Prev",
+                "symb": "%",
+                "avgKY": "15.5",
+                "avgUS": "13.9",
+                "text": " prevalence (Hear Failure)",
+                "cat": "prevalence"
+            },
+
+            "hfExpOption": { // Heart Failure
+                "value": "hfExp", // Exp
+                "calc": "Heart_Failure_Exp",
+                "symb": "$",
+                "avgKY": "26421.1",
+                "avgUS": "30051.5",
+                "text": " per capita (Hear Failure)",
+                "cat": "expenditure"
+            },
+            "ihdPrevOption": { // Ischemi Heart Disease
+                "value": "ihdPrev", //Prevalence
+                "calc": "Ischemic_Heart_Disease_Prev",
+                "symb": "%",
+                "avgKY": "29.4",
+                "avgUS": "26.9",
+                "text": " prevalence (Ischemic Heart Disease)",
+                "cat": "prevalence"
+            },
+
+            "ihdExpOption": { // Ischemic Heart Disease
+                "value": "ihdExp", // Expenditure
+                "calc": "Ishcemic_Heart_Disease_Exp",
+                "symb": "$",
+                "avgKY": "20384.6",
+                "avgUS": "18150.6",
+                "text": " per capita (Ischemic Heart Disease)",
+                "cat": "expenditure"
+
+            }
+        };
+
 
     var options = {
         zoomSnap: .1,
@@ -284,6 +368,7 @@
     /******************************** GET BASEMAP ***********************************************/
     /*  L.control.Zoom  --- Zoom
     /*  Position --- bottomright
+    /*
     /********************************************************************************************/
 
     var basemap_url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
