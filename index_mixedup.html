@@ -81,9 +81,6 @@
             text-transform: uppercase;
         }
 
-
-
-
         #map {
             width: 100%;
             top: 12%;
@@ -115,7 +112,7 @@
         }
 
         footer {
-            padding: 6px 10%;
+            /*padding: 6px 10%; */
             width: 100%;
         }
 
@@ -553,6 +550,12 @@
                 }
 
             };
+
+            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
+                "</h5>" +
+                "<h3>County rank</h3>");
+            $("#theList").children("div").append("<br style='padding-top:6px'>")
+
         } else {
             for (i = 0; i < length; i++) {
                 while (i < 20) {
@@ -611,7 +614,10 @@
 
             };
 
-
+            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category + "per capita" +
+                "</h5>" +
+                "<h3>County rank</h3>");
+            $("#theList").children("div").append("<br style='padding-top:6px'>")
 
 
 
@@ -619,11 +625,7 @@
 
         // create h1 element and add the statewide percentage
 
-        $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
-            "</h5>" +
-            "<br>" +
-            "<h3>County rank</h3>");
-        $("#theList").children("div").append("<br style='padding-top:6px'>")
+
 
 
 
