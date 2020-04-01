@@ -94,6 +94,14 @@
             text-transform: capitalize;
         }
 
+        /*subheading for popup - Prevalence */
+        h8 {
+            font-family: Lato, sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            color: #de3d26;
+        }
 
         #map {
             width: 100%;
@@ -710,7 +718,7 @@
             if (catCon == "prevalence") {
 
                 layer.bindPopup(
-                    `<p><h3>${props["NAME"]} County</h3> ${text} </p>
+                    `<p><h3>${props["NAME"]} County</h3> <h8>${text}</h8> </p>
 
                          County Prevalence: ${(hCon).toLocaleString()}${symbol}<br>
 
@@ -725,11 +733,9 @@
 
 
                 layer.bindPopup(
-                    `<p><h3>${props["NAME"]} County</h3> ${text} </p>
+                    `<p><h3>${props["NAME"]} County</h3> <h8>${text}</h8> </p>
 
                 County Expenditure: ${symbol}${(hCon).toLocaleString()} per capita<br>
-
-                ======
 
                         <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br>
                         National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br></p>
@@ -779,7 +785,7 @@
     function getClassBreaks(dataLayer, attributes) {
         //function getClassBreaks(dataLayer, settingsDrawMap) {
 
-        /*___________________________ A. Create Array of Cardiac Prevalence ___________________________*/
+        /*___________________________ A. Create Array of Chronic Conditions ___________________________*/
         // var values - empty array to hold all values from dataLayer (layer.feature.properties)
         // loop through datalayer using Leaflet method .eachLayer
         // var value - Prevalence of Atrial Fibrillation each layer (county)
