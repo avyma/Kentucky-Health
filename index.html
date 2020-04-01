@@ -200,28 +200,29 @@
         <button id="info-button" onclick="myInfo()">Information</button>
         <!--<h1>Map Title</h1> -->
         <!--<h2>Map Subtitle</h2> -->
+
         <!--<label for="chronic disease">Choose a chronic disease:</label>-->
         <select name="Select A Chronic Disease" id="chonicdisease">
             <!--blank -->
-            <option value=""></option>
+            <!--<option value=""></option> -->
 
             <!--Atrial Fibrillation Group -->
             <optgroup label="Atrial Fibrillation">
-                <option value="afPrev">Prevalence</option>
-                <option value="afExp">Cost Per Capita</option>
+                <option value="afPrev">AF Prevalence</option>
+                <option value="afExp">AF Cost Per Capita</option>
             </optgroup>
 
             <!-- Heart Failure Group -->
-            <optgroup label="Heart Failure">
+            <!--  <optgroup label="Heart Failure">
                 <option value="hfPrev">Prevalence</option>
                 <option value="hfExp">Cost Per Capita</option>
-            </optgroup>
+            </optgroup> -->
 
             <!-- Ischemic Heart Disease Group-->
-            <optgroup label="Ischemic Heart Disease">
+            <!-- <optgroup label="Ischemic Heart Disease">
                 <option value="ihdPrev">Prevalence</option>
                 <option value="ihdExp">Cost Per Capita</option>
-            </optgroup>
+            </optgroup> -->
         </select>
 
 </body>
@@ -255,6 +256,7 @@
         <div></div> <!-- ...and so on -->
         <div></div>
         <div></div>
+        <div></div>
 
     </div>
 </footer>
@@ -282,7 +284,7 @@
     /*                - Key within the optionsAnalysis object containing: value, calc, symb, avgKY, avgUS, text, and cat  */
     /*                - 1 of GeoJSON layer if selected                                                                    */
     /*   value - property to test for user-select item                                                                    */
-    /*   calc - variable called from external data representing the item to be mapp                                       */
+    /*   calc - variable called from external data representing the attributes to be mapp                                 */
     /*   symb - to be used as part of popup subject to prevalence or expenditure map items                                */
     /*   avgKY - average for Kentucky - to be used to measure and compare values per KY counties                          */
     /*   avgUS - average for US - to be used to measure and compare values per KY counties                                */
@@ -321,7 +323,7 @@
                 "symb": "%",
                 "avgKY": "15.5",
                 "avgUS": "13.9",
-                "text": " prevalence (Hear Failure)",
+                "text": " prevalence (Heart Failure)",
                 "cat": "prevalence"
             },
 
@@ -331,7 +333,7 @@
                 "symb": "$",
                 "avgKY": "26421.1",
                 "avgUS": "30051.5",
-                "text": " per capita (Hear Failure)",
+                "text": " per capita (Heart Failure)",
                 "cat": "expenditure"
             },
             "ihdPrevOption": { // Ischemi Heart Disease
@@ -413,9 +415,136 @@
         })
 
         dataLayer.addTo(map)
+
+        // drawMap functions using 3 default arguments
+        // Atrial_Fibrillation_Prev layer drawn first - as a default map (when page loads)
         drawMap(dataLayer, "Atrial_Fibrillation_Prev",
-            "Atrial Fibrillation Prevalence"); // calling the drawMap functions
-    });
+            "Prevalence of Atrial Fibrillation"); // calling the drawMap functions
+
+        // get value of select element, which by default is "Atrial_Fibrillation_Prev"
+        var optionSelect = $("select").val();
+
+        //console.log(optionSelect);
+
+
+        drawTable(data, optionSelect);
+        // console.log(settingsDrawMap[4]);
+
+        // listen for change in select element. When change occurs, draw new map and table
+        $("select").change(function () {
+
+            optionSelect = $("select").val()
+            drawTable(data, optionSelect)
+
+
+            // drawTable returns values that can be used to draw the new map
+            drawMap(dataLayer, settingsDrawMap[0], settingsDrawMap[4]);
+
+
+        })
+
+    }); /********************************* END CountyLayer Function ************************************************/
+
+
+    function drawTable(data, optionSelect) {
+
+        // empty the div element with the ID theList
+        $("#theList").children().empty()
+        //console.log(data);
+        // assign local variables
+        var
+
+            i = 0,
+            length = data.features.length,
+            ky = data.features
+
+
+        // find which option was selected and call its corresponding properties
+        for (var item in optionsAnalysis) {
+            if (optionSelect == optionsAnalysis[item].value) {
+                var
+                    eval = optionsAnalysis[item].calc,
+                    catSymb = optionsAnalysis[item].symb,
+                    stAvg = optionsAnalysis[item].avgKY,
+                    natAvg = optionsAnalysis[item].avgUS,
+                    tblText = optionsAnalysis[item].text,
+                    category = optionsAnalysis[item].cat;
+
+
+                break;
+            }
+        };
+
+
+        // sort from highest to lowest
+        ky.sort(function (a, b) {
+            return b.properties[eval] - a.properties[eval]
+        })
+
+
+        // loop through 120 counties in batches of 30 to create 4-column layout
+        for (i = 0; i < length; i++) {
+            while (i < 20) {
+
+                $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+            while (i >= 20 && i < 40) {
+
+                $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+            while (i >= 40 && i < 60) {
+
+                $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+            while (i >= 60 && i < 80) {
+
+                $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+            while (i >= 80 && i < 100) {
+
+                $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+            while (i >= 100 && i < 120) {
+
+                $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                    .properties[eval]).toLocaleString() + "<br>");
+                i++
+            }
+
+        };
+
+
+
+        // create h1 element and add the statewide percentage
+        $("#theList").prepend("<h1>" + stAvg + catSymb + tblText + "statewide<h1><h3>County rank</h3>");
+        $("#theList").children("div").append("<br style='padding-top:10px'>")
+
+        // collect and return arguments for drawMap function
+        settingsDrawMap = [eval, catSymb, stAvg, natAvg, tblText, category];
+        return settingsDrawMap;
+        //console.log(settingsDrawMap);
+
+
+
+    }; /*********************************************** END DrawTable FUNCTION ************************************************************/
+
+
+
 
 
     /******************************** FUNCTION drawMap ***********************************************/
@@ -428,14 +557,14 @@
     // Map: A. Counties; B. States
     /*************************************************************************************************/
 
-    function drawMap(dataLayer, attributes, popuptext) {
+    function drawMap(dataLayer, attributes, text) {
 
 
         /*_________________________________________A. Map Counties ___________________________________________*/
 
         var breaks = getClassBreaks(dataLayer, attributes); // (a) call getClassBreaks function
 
-        drawLegend(breaks, popuptext); // (b) call drawLegend function
+        drawLegend(breaks, text); // (b) call drawLegend function
         //Arguments: breaks - defined in the getClassBreaks function
         //Arguments: popuptext --> "Median Average Rent"
 
@@ -455,13 +584,13 @@
                             }
             */
             layer.bindPopup(
-                `<h3>${props["NAME"]} County</h3>  ${popuptext}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
-                //`<h3>${props["NAME"]} County</h3>  ${popuptext}: $${cardiacPrev}`
+                `<h3>${props["NAME"]} County</h3>  ${text}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
+                //`<h3>${props["NAME"]} County</h3>  ${text}: $${cardiacPrev}`
             );
         });
 
 
-        /*_________________________________________B. Map States ___________________________________________*/
+        /*_________________________________________B. Map State: KY ___________________________________________*/
 
         $.when(countyLayer).done(function () {
             $.getJSON("data/Kentucky_state_boundary.geojson", function (data) {
@@ -478,9 +607,9 @@
                 });
                 stateLayer.addTo(map)
             })
-        })
+        }) // end map state (KY)
 
-    }; // ends drawMap Function
+    }; /***********************************End drawMap Function **************************************/
 
 
 
@@ -517,7 +646,7 @@
             breaks = clusters.map(function (cluster) {
                 return [cluster[0], cluster.pop()];
             });
-        console.log(clusters); // + + + + + console.log() + + + + +
+        //console.log(clusters); // + + + + + console.log() + + + + +
         //console.log(breaks); // + + + + + console.log() + + + + +
         return breaks; // to function drawMap (line xxx)
 
@@ -559,7 +688,9 @@
     //      - Assign colors to breaks (assign color to break value - lower range of each cluster)
     /*************************************************************************************************/
 
-    function drawLegend(breaks, popuptext) {
+    function drawLegend(breaks, text) {
+
+
 
         var legend = L.control({
             position: 'topright'
@@ -567,10 +698,10 @@
 
         legend.onAdd = function () { // add legend
             var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
-            div.innerHTML = `<h3> ${popuptext} </h3>`; // Title of Legend
+            div.innerHTML = `<h3> ${text} </h3>`; // Title of Legend
 
 
-            /*___________________________ A. ASSIGN COLORS TO RENT DATA CLASS BREAKS ___________________________*/
+            /*___________________________ A. ASSIGN COLORS TO CLASS BREAKS: Prevalence (%) or Cost/Capita ($) ___________________________*/
             // Use "for loop" to assign colors to each break value (lower range value)
             // Call Function getColor to assign appropriate and consistent color:
             //      Parameters: breaks[i][0] - lower range of each class breaks
@@ -579,7 +710,7 @@
             for (var i = 0; i < breaks.length; i++) {
                 var color = getColor(breaks[i][0], breaks); // color acquired from getColor function
 
-                console.log(color); // + + + + + console.log() + + + + +
+                //console.log(color); // + + + + + console.log() + + + + +
 
                 div.innerHTML +=
                     `<span style="background:${color}"></span>
@@ -592,6 +723,7 @@
         }; // end of .onAdd
 
         legend.addTo(map); // add legend to map
+
 
     } // end of drawLegend Function
 
