@@ -344,7 +344,7 @@
                 "avgKY": "24714.9",
                 "avgUS": "26210.3",
                 "text": " Atrial Fibrillation",
-                "cat": "expenditure"
+                "cat": "expenditure per capita"
             },
 
             "hfPrevOption": { // Heart Failure
@@ -364,7 +364,7 @@
                 "avgKY": "26421.1",
                 "avgUS": "30051.5",
                 "text": " Heart Failure",
-                "cat": "expenditure"
+                "cat": "expenditure per capita"
             },
             "ihdPrevOption": { // Ischemic Heart Disease
                 "value": "ihdPrev", //Prevalence
@@ -383,7 +383,7 @@
                 "avgKY": "20384.6",
                 "avgUS": "18150.6",
                 "text": " Ischemic Heart Disease",
-                "cat": "expenditure"
+                "cat": "expenditure per capita"
 
             }
         };
@@ -637,7 +637,7 @@
             };
 
             // create h1 element and add the statewide percentage
-            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category + "  per capita" +
+            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
                 "</h5>" + "<h6>" + "National Average: " + catSymb + natAvg + ";" +
                 "       State Average: " + catSymb + stAvg + "</h6>" +
                 "<h3>County rank</h3>");
@@ -717,8 +717,8 @@
                         <p>State Average Prevalence: ${avgStKY}${symbol}<br>
                         National Average Prevalence: ${avgNatUS}${symbol}<br></p>
 
-                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString()}<br>
-                        Ratio to National: ${(hCon/avgNatUS).toLocaleString()}<br>`
+                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString("en-US", {maximumFractionDigits:2})}<br>
+                        Ratio to National: ${(hCon/avgNatUS).toLocaleString("en-US", {maximumFractionDigits:2})}<br>`
                 );
 
             } else {
@@ -729,11 +729,13 @@
 
                 County Expenditure: ${symbol}${(hCon).toLocaleString()} per capita<br>
 
-                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString()} per capita<br>
-                        National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString()} per capita<br></p>
+                ======
 
-                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString()}<br>
-                        Ratio to National: ${(hCon/avgNatUS).toLocaleString()}<br>`
+                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br>
+                        National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br></p>
+
+                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString("en-US", {maximumFractionDigits:2})}<br>
+                        Ratio to National: ${(hCon/avgNatUS).toLocaleString("en-US", {maximumFractionDigits:2})}<br>`
                 );
             }
 
