@@ -25,7 +25,7 @@
         header {
             top: 0px;
             width: 100%;
-            margin: 10px auto 10px 60px;
+            margin: 40px auto 10px 60px;
             /*background-color: coral; */
         }
 
@@ -81,7 +81,18 @@
             text-transform: uppercase;
         }
 
+        h6 {
+            font-family: Lato, sans-serif;
+            letter-spacing: 3px;
+            font-size: 1em;
+        }
 
+        h7 {
+            font-family: Lato, sans-serif;
+            letter-spacing: 1px;
+            font-size: 1.3em;
+            text-transform: capitalize;
+        }
 
 
         #map {
@@ -102,7 +113,7 @@
 
         #theList div {
             float: left;
-            width: 250px;
+            width: 280px;
         }
 
         a {
@@ -115,8 +126,10 @@
         }
 
         footer {
-            padding: 6px 10%;
+            /*padding: 6px 10%; */
             width: 100%;
+            margin: 15px auto 20px 60px;
+            line-height: 25px;
         }
 
 
@@ -353,7 +366,7 @@
                 "text": " Heart Failure",
                 "cat": "expenditure"
             },
-            "ihdPrevOption": { // Ischemi Heart Disease
+            "ihdPrevOption": { // Ischemic Heart Disease
                 "value": "ihdPrev", //Prevalence
                 "calc": "Ischemic_Heart_Disease_Prev",
                 "symb": "%",
@@ -365,7 +378,7 @@
 
             "ihdExpOption": { // Ischemic Heart Disease
                 "value": "ihdExp", // Expenditure
-                "calc": "Ishcemic_Heart_Disease_Exp",
+                "calc": "Ischemic_Heart_Disease_Exp",
                 "symb": "$",
                 "avgKY": "20384.6",
                 "avgUS": "18150.6",
@@ -433,10 +446,14 @@
 
         dataLayer.addTo(map)
 
-        // drawMap functions using 3 default arguments
-        // Atrial_Fibrillation_Prev layer drawn first - as a default map (when page loads)
-        drawMap(dataLayer, "Atrial_Fibrillation_Prev",
-            "Prevalence of Atrial Fibrillation"); // calling the drawMap functions
+
+
+
+        //   drawMap functions using 2 default arguments (one is array)
+        //   Atrial_Fibrillation_Prev layer drawn first - as a default map (when page loads)
+        var beginDraw = ["Atrial_Fibrillation_Prev", "%", "8.4", "8.4", "Atrial Fibrillation", "prevalence"];
+
+        drawMap(dataLayer, beginDraw); // calling the drawMap functions
 
         // get value of select element, which by default is "Atrial_Fibrillation_Prev"
         var optionSelect = $("select").val();
@@ -455,7 +472,7 @@
 
 
             // drawTable returns values that can be used to draw the new map
-            drawMap(dataLayer, settingsDrawMap[0], settingsDrawMap[4]);
+            drawMap(dataLayer, settingsDrawMap);
 
 
         })
@@ -553,6 +570,14 @@
                 }
 
             };
+
+            // create h1 element and add the statewide percentage
+            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
+                "</h5>" + "<br>" + "<h6>" + "National Average: " + natAvg + catSymb + ";" +
+                "        State Average: " + stAvg + catSymb + "</h6>" +
+                "<h3>County rank</h3>");
+            $("#theList").children("div").append("<br style='padding-top:6px'>")
+
         } else {
             for (i = 0; i < length; i++) {
                 while (i < 20) {
@@ -611,21 +636,16 @@
 
             };
 
-
+            // create h1 element and add the statewide percentage
+            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category + "  per capita" +
+                "</h5>" + "<h6>" + "National Average: " + catSymb + natAvg + ";" +
+                "       State Average: " + catSymb + stAvg + "</h6>" +
+                "<h3>County rank</h3>");
+            $("#theList").children("div").append("<br style='padding-top:6px'>")
 
 
 
         }
-
-        // create h1 element and add the statewide percentage
-
-        $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
-            "</h5>" +
-            "<br>" +
-            "<h3>County rank</h3>");
-        $("#theList").children("div").append("<br style='padding-top:6px'>")
-
-
 
         // collect and return arguments for drawMap function
         settingsDrawMap = [eval, catSymb, stAvg, natAvg, tblText, category];
@@ -641,7 +661,9 @@
 
     /******************************** FUNCTION drawMap ***********************************************/
     // function called from the countyLayer Function above within JQuery environment
-    // Arguments sent: dataLayer, 'Atrial_Fibrillation_Prev' (a type of heart condition), String: "Atrial Fibrillation Prevalence" --> Parameters: dataLayer, attributes, popuptext
+    // Arguments sent: dataLayer, 'Atrial_Fibrillation_Prev'
+    // (a type of heart condition), String: "Atrial Fibrillation Prevalence"
+    // --> Parameters: dataLayer, attributes, popuptext
     // Call functions: (a) getClassBreaks, (b) drawLegend
     // Color for class and create Pop-Up
     // Call drawLegend
@@ -649,37 +671,78 @@
     // Map: A. Counties; B. States
     /*************************************************************************************************/
 
-    function drawMap(dataLayer, attributes, text) {
+    // function drawMap(dataLayer, attributes, text) {
+    function drawMap(dataLayer, settingsDrawMap) {
+
+        var attributes = settingsDrawMap[0],
+            symbol = settingsDrawMap[1],
+            avgStKY = settingsDrawMap[2],
+            avgNatUS = settingsDrawMap[3],
+            text = settingsDrawMap[4],
+            catCon = settingsDrawMap[5];
+
+        console.log(catCon);
+
+        //stRatio = settings
+
+        //console.log(text);
+        //console.log(attributes);
 
 
         /*_________________________________________A. Map Counties ___________________________________________*/
 
         var breaks = getClassBreaks(dataLayer, attributes); // (a) call getClassBreaks function
+        //var breaks = getClassBreaks(dataLayer, settingsDrawMap);
 
-        drawLegend(breaks, text); // (b) call drawLegend function
+
+        drawLegend(breaks, settingsDrawMap); // (b) call drawLegend function 
         //Arguments: breaks - defined in the getClassBreaks function
-        //Arguments: popuptext --> "Median Average Rent"
+        //Arguments: popuptext --> "Prevalence" or "Spending per Capita"
 
         dataLayer.eachLayer(function (layer) {
             var props = layer.feature.properties,
-                cardiacPrev = props[attributes];
-
+                hCon = props[attributes];
             layer.setStyle({
-                fillColor: getColor(cardiacPrev, breaks)
+                fillColor: getColor(hCon, breaks)
             });
 
-            /*
-                            var usCurrency = {
-                                style: 'currency',
-                                currency: 'USD',
-                                currencyDisplay: "code"
-                            }
-            */
-            layer.bindPopup(
-                `<h3>${props["NAME"]} County</h3>  ${text}: ${(cardiacPrev/100).toLocaleString("en-US", {style: 'percent', maximumSignificantDigits:2})}` // ??? NOT WORKING - ASSIST PLEASE ???
-                //`<h3>${props["NAME"]} County</h3>  ${text}: $${cardiacPrev}`
-            );
+
+            if (catCon == "prevalence") {
+
+                layer.bindPopup(
+                    `<p><h3>${props["NAME"]} County</h3> ${text} </p>
+
+                         County Prevalence: ${(hCon).toLocaleString()}${symbol}<br>
+
+                        <p>State Average Prevalence: ${avgStKY}${symbol}<br>
+                        National Average Prevalence: ${avgNatUS}${symbol}<br></p>
+
+                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString()}<br>
+                        Ratio to National: ${(hCon/avgNatUS).toLocaleString()}<br>`
+                );
+
+            } else {
+
+
+                layer.bindPopup(
+                    `<p><h3>${props["NAME"]} County</h3> ${text} </p>
+
+                County Expenditure: ${symbol}${(hCon).toLocaleString()} per capita<br>
+
+                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString()} per capita<br>
+                        National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString()} per capita<br></p>
+
+                        Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString()}<br>
+                        Ratio to National: ${(hCon/avgNatUS).toLocaleString()}<br>`
+                );
+            }
+
         });
+
+
+
+
+
 
 
         /*_________________________________________B. Map State: KY ___________________________________________*/
@@ -712,20 +775,23 @@
     /*************************************************************************************************/
 
     function getClassBreaks(dataLayer, attributes) {
+        //function getClassBreaks(dataLayer, settingsDrawMap) {
 
         /*___________________________ A. Create Array of Cardiac Prevalence ___________________________*/
         // var values - empty array to hold all values from dataLayer (layer.feature.properties)
         // loop through datalayer using Leaflet method .eachLayer
         // var value - Prevalence of Atrial Fibrillation each layer (county)
         // push value (i.e. layer.feature.properties.Atrial_Fibrillation_Prev) to array "values"
-
-        var values = [];
+        //var attributes = settingsDrawMap[0],
+        values = [];
         dataLayer.eachLayer(function (layer) {
             var props = layer.feature.properties; // shorthand reference to properties
             var value = props[attributes];
             values.push(Number(value));
         });
 
+
+        //console.log(attributes);
         //console.log(values) // + + + + + console.log() + + + + +
 
         /*___________________________B. Define & Classify Clusters_______________________________*/
@@ -780,9 +846,13 @@
     //      - Assign colors to breaks (assign color to break value - lower range of each cluster)
     /*************************************************************************************************/
 
-    function drawLegend(breaks, text) {
+    //function drawLegend(breaks, text) {
+    function drawLegend(breaks, settingsDrawMap) {
 
-
+        var text = settingsDrawMap[4];
+        var subText = settingsDrawMap[5];
+        var symbol = settingsDrawMap[1];
+        console.log(text);
 
         var legend = L.control({
             position: 'topright'
@@ -790,7 +860,7 @@
 
         legend.onAdd = function () { // add legend
             var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
-            div.innerHTML = `<h3> ${text} </h3>`; // Title of Legend
+            div.innerHTML = `<h3>${text}</h3><h7>${subText} (${symbol})<br></h7><br>`; // Title of Legend
 
 
             /*___________________________ A. ASSIGN COLORS TO CLASS BREAKS: Prevalence (%) or Cost/Capita ($) ___________________________*/
@@ -806,7 +876,7 @@
 
                 div.innerHTML +=
                     `<span style="background:${color}"></span>
-          <label>${breaks[i][0].toLocaleString()}&mdash;
+          <label>${breaks[i][0].toLocaleString()}&mdash; 
             ${breaks[i][1].toLocaleString()}</label>`;
             }
 
