@@ -23,13 +23,13 @@
 
 
         header {
-            top: 400px;
+            top: 0px;
             width: 100%;
-            margin: 80px auto 10px auto;
+            margin: 10px auto 10px 60px;
+            /*background-color: coral; */
         }
 
         select {
-            margin-left: 15px;
             width: 260px;
 
         }
@@ -41,31 +41,54 @@
             text-emphasis: none;
         }
 
-        /*
+
         h1 {
             display: inline-block;
-            margin-right: 20px;
             font-family: Montserrat;
+            font-size: 40px;
+            padding-bottom: 5px;
             letter-spacing: 3px;
             color: #001323;
+            line-height: 1px;
         }
 
         h2 {
             display: inline-block;
+            font-family: Lato, sans serif;
+            text-transform: uppercase;
             color: #001323;
+            letter-spacing: 8px;
         }
-*/
+
         h3 {
             font-family: Montserrat;
             letter-spacing: 3px;
             font-size: 1.2em;
+            text-transform: uppercase;
         }
+
+        h4 {
+            font-family: Montserrat, sans-serif;
+            font-size: 1.5em;
+            margin: 0 0 5px 0;
+        }
+
+        h5 {
+            font-family: Montserrat;
+            display: inline-block;
+            letter-spacing: 3px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+        }
+
+
+
 
         #map {
             width: 100%;
             top: 12%;
             /*bottom: 0; */
-            height: 720px;
+            height: 580px;
             /*position: absolute;*/
             /*margin: 10px*/
             background: rgba(253, 117, 54, 0.8);
@@ -181,12 +204,6 @@
             font-size: 1em;
         }
 
-        h1 {
-            font-family: Montserrat, sans-serif;
-            font-size: 1.5em;
-            margin: 0 0 5px 0;
-        }
-
         .footer-img {
             float: right;
             height: 10vh;
@@ -198,8 +215,8 @@
 <body>
     <header>
         <button id="info-button" onclick="myInfo()">Information</button>
-        <!--<h1>Map Title</h1> -->
-        <!--<h2>Map Subtitle</h2> -->
+        <h1>Map Title</h1>
+        <h2>Map Subtitle</h2><br>
 
         <!--<label for="chronic disease">Choose a chronic disease:</label>-->
         <select name="Select A Chronic Disease" id="chonicdisease">
@@ -213,16 +230,16 @@
             </optgroup>
 
             <!-- Heart Failure Group -->
-            <!--  <optgroup label="Heart Failure">
-                <option value="hfPrev">Prevalence</option>
-                <option value="hfExp">Cost Per Capita</option>
-            </optgroup> -->
+            <optgroup label="Heart Failure">
+                <option value="hfPrev">HF Prevalence</option>
+                <option value="hfExp">HF Cost Per Capita</option>
+            </optgroup>
 
             <!-- Ischemic Heart Disease Group-->
-            <!-- <optgroup label="Ischemic Heart Disease">
-                <option value="ihdPrev">Prevalence</option>
-                <option value="ihdExp">Cost Per Capita</option>
-            </optgroup> -->
+            <optgroup label="Ischemic Heart Disease">
+                <option value="ihdPrev">IHD Prevalence</option>
+                <option value="ihdExp">IHD Cost Per Capita</option>
+            </optgroup>
         </select>
 
 </body>
@@ -236,7 +253,7 @@
 
 <div id='footer'>
     <div><img src="https://uky-gis.github.io/graphics/logo-color-400px.png" class="footer-img">
-        <h1> CARDIAC-RELATED CHRONIC CONDITIONS PREVALENCE & COSTS - KENTUCKY (2017)</h1>
+        <h4> CARDIAC-RELATED CHRONIC CONDITIONS PREVALENCE & COSTS - KENTUCKY (2017)</h4>
 
         <br>Data obtained through the Center for Medicare & Medicaid Services (<a
             href="https://www.cms.gov/">https://www.cms.gov</a>)
@@ -274,8 +291,8 @@
 </script>
 
 <script>
-    //$("h1").html("")
-    //$("h2").html("")
+    $("h1").html("KENTUCKY")
+    $("h2").html("   - Chronic Cardiac Conditions (2017)")
 
 
     /************************************** DECLARE GLOBAL VARIABLES FOR SELECTION ****************************************/
@@ -303,7 +320,7 @@
                 "symb": "%",
                 "avgKY": "8.4",
                 "avgUS": "8.4",
-                "text": " prevalence (Atrial Fibrillation)",
+                "text": " Atrial Fibrillation",
                 "cat": "prevalence"
             },
 
@@ -313,7 +330,7 @@
                 "symb": "$",
                 "avgKY": "24714.9",
                 "avgUS": "26210.3",
-                "text": " per capita (Atrial Fibrillation)",
+                "text": " Atrial Fibrillation",
                 "cat": "expenditure"
             },
 
@@ -483,45 +500,53 @@
 
 
         // loop through 120 counties in batches of 30 to create 4-column layout
+        // Segregate category: expenditure and category: prevalence using IF-ELSE statement
+
         for (i = 0; i < length; i++) {
             while (i < 20) {
 
-                $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
 
             while (i >= 20 && i < 40) {
 
-                $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
 
             while (i >= 40 && i < 60) {
 
-                $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
 
             while (i >= 60 && i < 80) {
 
-                $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
 
             while (i >= 80 && i < 100) {
 
-                $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
 
             while (i >= 100 && i < 120) {
 
-                $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[i]
+                $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
+                        i]
                     .properties[eval]).toLocaleString() + "<br>");
                 i++
             }
@@ -529,15 +554,19 @@
         };
 
 
-
         // create h1 element and add the statewide percentage
-        $("#theList").prepend("<h1>" + stAvg + catSymb + tblText + "statewide<h1><h3>County rank</h3>");
+
+        $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category + " per capita" +
+            "</h5>" +
+            "<br>" +
+            "<h3>County rank</h3>");
         $("#theList").children("div").append("<br style='padding-top:10px'>")
 
-        // collect and return arguments for drawMap function
-        settingsDrawMap = [eval, catSymb, stAvg, natAvg, tblText, category];
-        return settingsDrawMap;
-        //console.log(settingsDrawMap);
+
+    }
+    // collect and return arguments for drawMap function
+    settingsDrawMap = [eval, catSymb, stAvg, natAvg, tblText, category];
+    return settingsDrawMap;
 
 
 
