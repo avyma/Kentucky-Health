@@ -177,8 +177,10 @@
 
         .leaflet-bar a {
             /*override the default style for the Leaflet's zoom */
-            background: rgba(100, 100, 100, 0.9);
-            color: rgba(244, 244, 244, 0.8);
+            background: rgba(247, 240, 236, 0.8);
+            color: rgba(129, 48, 2, 0.7);
+            border: 2px solid rgba(129, 48, 2, 0.7);
+            box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
         }
 
         #info-button {
@@ -235,7 +237,7 @@
 
 <body>
     <header>
-        <button id="info-button" onclick="myInfo()">Information</button>
+        <!--<button id="info-button" onclick="myInfo()">Information</button> -->
         <h1>Map Title</h1>
         <h2>Map Subtitle</h2><br>
 
@@ -493,17 +495,20 @@
         // empty the div element with the ID theList
         $("#theList").children().empty()
         //console.log(data);
+
+
         // assign local variables
         var
-
             i = 0,
             length = data.features.length,
-            ky = data.features
+            ky = data.features;
 
 
         // find which option was selected and call its corresponding properties
         for (var item in optionsAnalysis) {
+
             if (optionSelect == optionsAnalysis[item].value) {
+
                 var
                     eval = optionsAnalysis[item].calc,
                     catSymb = optionsAnalysis[item].symb,
@@ -511,8 +516,6 @@
                     natAvg = optionsAnalysis[item].avgUS,
                     tblText = optionsAnalysis[item].text,
                     category = optionsAnalysis[item].cat;
-
-
                 break;
             }
         };
@@ -580,10 +583,10 @@
             };
 
             // create h1 element and add the statewide percentage
-            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
-                "</h5>" + "<br>" + "<h6>" + "National Average: " + natAvg + catSymb + ";" +
-                "        State Average: " + stAvg + catSymb + "</h6>" +
-                "<h3>County rank</h3>");
+            $("#theList").prepend("<h2>" + tblText + "</h2><h5> - " + category +
+                "</h5><br><h6>" + "National Average: " + natAvg + catSymb + ";" +
+                "        State Average: " + stAvg + catSymb + "</h6><h3>County rank</h3>");
+
             $("#theList").children("div").append("<br style='padding-top:6px'>")
 
         } else {
@@ -591,66 +594,54 @@
                 while (i < 20) {
 
                     $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
                 while (i >= 20 && i < 40) {
 
                     $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
                 while (i >= 40 && i < 60) {
 
                     $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
                 while (i >= 60 && i < 80) {
 
                     $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
                 while (i >= 80 && i < 100) {
 
                     $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
                 while (i >= 100 && i < 120) {
 
                     $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " + catSymb +
-                        (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + "<br>");
+                        (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                     i++
                 }
 
             };
 
             // create h1 element and add the statewide percentage
-            $("#theList").prepend("<h2>" + tblText + "</h2>" + "<h5>" + " - " + category +
-                "</h5>" + "<h6>" + "National Average: " + catSymb + natAvg + ";" +
-                "       State Average: " + catSymb + stAvg + "</h6>" +
-                "<h3>County rank</h3>");
-            $("#theList").children("div").append("<br style='padding-top:6px'>")
+            $("#theList").prepend("<h2>" + tblText + "</h2><h5> - " + category +
+                "</h5><h6>National Average: " + catSymb + parseInt(natAvg).toLocaleString() +
+                ";       State Average: " + catSymb + parseInt(stAvg).toLocaleString() + "</h6><h3>County rank</h3>"
+            );
 
+            $("#theList").children("div").append("<br style='padding-top:6px'>")
 
 
         }
@@ -689,9 +680,7 @@
             text = settingsDrawMap[4],
             catCon = settingsDrawMap[5];
 
-        console.log(catCon);
-
-        //stRatio = settings
+        //console.log(catCon);
 
         //console.log(text);
         //console.log(attributes);
@@ -740,8 +729,8 @@
 
                 County Expenditure: ${symbol}${(hCon).toLocaleString()} per capita<br>
 
-                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString()} per capita<br>
-                        National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br></p>
+                        <p>State Average Expenditure: ${symbol}${parseInt(avgStKY).toLocaleString()} per capita<br>
+                        National Average Expenditure: ${symbol}${parseInt(avgNatUS).toLocaleString()} per capita<br></p>
 
                         Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString("en-US", {maximumFractionDigits:2})}<br>
                         Ratio to National: ${(hCon/avgNatUS).toLocaleString("en-US", {maximumFractionDigits:2})}<br>`
@@ -749,12 +738,6 @@
             }
 
         });
-
-
-
-
-
-
 
         /*_________________________________________B. Map State: KY ___________________________________________*/
 
@@ -912,24 +895,25 @@
     /****************************** FUNCTION myInfo ***************************************************/
     // 
     /*************************************************************************************************/
+    /*
+        var clicked = false
 
-    var clicked = false
+        function myInfo() {
 
-    function myInfo() {
+            var x = document.getElementById('footer');
+            var y = document.getElementById('info-button');
 
-        var x = document.getElementById('footer');
-        var y = document.getElementById('info-button');
+            if (clicked) {
+                y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
+                x.style.height = '0px'; // no footer height
 
-        if (clicked) {
-            y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
-            x.style.height = '0px'; // no footer height
-
-        } else {
-            y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
-            x.style.height = '20vh'; // footer 33% of viewport height
-        }
-        clicked = !clicked
-    } // end of myInfo Function
+            } else {
+                y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
+                x.style.height = '20vh'; // footer 33% of viewport height
+            }
+            clicked = !clicked
+        } // end of myInfo Function
+        */
 </script>
 
 </body>
