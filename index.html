@@ -240,7 +240,7 @@
         <h2>Map Subtitle</h2><br>
 
         <!--<label for="chronic disease">Choose a chronic disease:</label>-->
-        <select name="Select A Chronic Disease" id="chonicdisease">
+        <select name="Select A Chronic Disease" id="chonicdisease" autocomplete="off">
             <!--blank -->
             <!--<option value=""></option> -->
 
@@ -715,6 +715,8 @@
             });
 
 
+
+
             if (catCon == "prevalence") {
 
                 layer.bindPopup(
@@ -731,13 +733,14 @@
 
             } else {
 
-
+                console.log(hCon);
+                console.log(avgStKY);
                 layer.bindPopup(
                     `<p><h3>${props["NAME"]} County</h3> <h8>${text}</h8> </p>
 
                 County Expenditure: ${symbol}${(hCon).toLocaleString()} per capita<br>
 
-                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br>
+                        <p>State Average Expenditure: ${symbol}${(avgStKY).toLocaleString()} per capita<br>
                         National Average Expenditure: ${symbol}${(avgNatUS).toLocaleString("en-US", {maximumFractionDigits:0})} per capita<br></p>
 
                         Ratio to State (Kentucky): ${(hCon/avgStKY).toLocaleString("en-US", {maximumFractionDigits:2})}<br>
@@ -867,8 +870,16 @@
         });
 
         legend.onAdd = function () { // add legend
-            var div = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
-            div.innerHTML = `<h3>${text}</h3><h7>${subText} (${symbol})<br></h7><br>`; // Title of Legend
+
+            if (legendDiv) {
+                legendDiv.remove('div')
+            };
+
+
+            legendDiv = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
+
+
+            legendDiv.innerHTML = `<h3>${text}</h3><h7>${subText} (${symbol})<br></h7><br>`; // Title of Legend
 
 
             /*___________________________ A. ASSIGN COLORS TO CLASS BREAKS: Prevalence (%) or Cost/Capita ($) ___________________________*/
@@ -882,13 +893,13 @@
 
                 //console.log(color); // + + + + + console.log() + + + + +
 
-                div.innerHTML +=
+                legendDiv.innerHTML +=
                     `<span style="background:${color}"></span>
           <label>${breaks[i][0].toLocaleString()}&mdash; 
             ${breaks[i][1].toLocaleString()}</label>`;
             }
 
-            return div; // return div element
+            return legendDiv; // return legendDiv element
 
         }; // end of .onAdd
 
