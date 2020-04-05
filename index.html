@@ -209,7 +209,15 @@
             padding: 6px 8px;
             font-size: 1 em;
             background: rgba(255, 255, 255, 0.1);
-            //box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); */
+            border-radius: 5px;
+        }
+
+        .infoBox {
+            padding: 6px 2px;
+            font-size: 1 em;
+            background: rgba(255, 255, 255, 0.1);
+            /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); */
             border-radius: 5px;
         }
 
@@ -349,6 +357,7 @@
 
         var legendDiv,
             sourceBoxDiv,
+            infoBoxDiv,
             settingsDrawMap,
             optionsAnalysis = {
                 "afPrevOption": { // Atrial Fibrillation
@@ -733,6 +742,7 @@
             //Arguments: popuptext --> "Prevalence" or "Spending per Capita"
 
             sourceMap(settingsDrawMap);
+            infoMap(settingsDrawMap);
 
             dataLayer.eachLayer(function (layer) {
                 var props = layer.feature.properties,
@@ -939,7 +949,7 @@
 
                 function myInfo() {
 
-                    var x = document.getElementById('map');
+                    var x = document.getElementById('footer');
                     var y = document.getElementById('info-button');
 
                     if (clicked) {
@@ -957,16 +967,6 @@
 
         function sourceMap(settingsDrawMap) {
 
-            infoCat = [];
-            infoText = [];
-
-            //console.log(settingsDrawMap);
-
-            infoCat = settingsDrawMap[5];
-            infoText = settingsDrawMap[4];
-
-            //console.log(infoCat);
-
             var sourceBox = L.control({
                 position: 'bottomleft'
             });
@@ -980,13 +980,39 @@
                 sourceBoxDiv = L.DomUtil.create('div', 'sourceBox')
 
                 sourceBoxDiv.innerHTML =
-                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
+                    `<h6>MAP BY   *  T H E  *  R I G H T  *  V U E  *</h6>Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
                         and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
 
                 return sourceBoxDiv;
             };
 
             sourceBox.addTo(map);
+
+        }
+
+
+        function infoMap(settingsDrawMap) {
+
+            var infoBox = L.control({
+                position: 'topleft'
+            });
+
+            infoBox.onAdd = function () {
+
+                if (infoBoxDiv) {
+                    infoBoxDiv.remove('div');
+                };
+
+                infoBoxDiv = L.DomUtil.create('div', 'infoBox')
+
+                infoBoxDiv.innerHTML =
+                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
+            and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
+
+                return infoBoxDiv;
+            };
+
+            infoBox.addTo(map);
 
         }
     </script>
