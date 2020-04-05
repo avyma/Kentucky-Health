@@ -205,6 +205,14 @@
             cursor: pointer;
         }
 
+        .sourceBox {
+            padding: 6px 8px;
+            font-size: 1 em;
+            background: rgba(255, 255, 255, 0.1);
+            //box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
         /*
         #footer {
             width: 100%;
@@ -340,6 +348,7 @@
 
 
         var legendDiv,
+            sourceBoxDiv,
             settingsDrawMap,
             optionsAnalysis = {
                 "afPrevOption": { // Atrial Fibrillation
@@ -434,7 +443,7 @@
         map.addLayer(tiles);
 
         map.addControl(L.control.zoom({
-            position: 'bottomright'
+            position: 'topright'
         }));
 
 
@@ -723,6 +732,8 @@
             //Arguments: breaks - defined in the getClassBreaks function
             //Arguments: popuptext --> "Prevalence" or "Spending per Capita"
 
+            sourceMap(settingsDrawMap);
+
             dataLayer.eachLayer(function (layer) {
                 var props = layer.feature.properties,
                     hCon = props[attributes];
@@ -874,7 +885,7 @@
             var text = settingsDrawMap[4];
             var subText = settingsDrawMap[5];
             var symbol = settingsDrawMap[1];
-            console.log(text);
+            //console.log(text);
 
             var legend = L.control({
                 position: 'topright'
@@ -924,26 +935,61 @@
         // 
         /*************************************************************************************************/
         /*
-            var clicked = false
+                var clicked = false
 
-            function myInfo() {
+                function myInfo() {
 
-                var x = document.getElementById('footer');
-                var y = document.getElementById('info-button');
+                    var x = document.getElementById('map');
+                    var y = document.getElementById('info-button');
 
-                if (clicked) {
-                    y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
-                    x.style.height = '0px'; // no footer height
+                    if (clicked) {
+                        y.style.background = 'rgba(100, 100, 100, 0.9)'; // gray button
+                        x.style.height = '0px'; // no footer height
 
-                } else {
-                    y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
-                    x.style.height = '20vh'; // footer 33% of viewport height
-                }
-                clicked = !clicked
-            } // end of myInfo Function
-            */
+                    } else {
+                        y.style.background = 'rgba(158, 154, 200, 0.8)'; // gray button
+                        x.style.height = '20vh'; // footer 33% of viewport height
+                    }
+                    clicked = !clicked
+                } // end of myInfo Function
+    
+    */
+
+        function sourceMap(settingsDrawMap) {
+
+            infoCat = [];
+            infoText = [];
+
+            //console.log(settingsDrawMap);
+
+            infoCat = settingsDrawMap[5];
+            infoText = settingsDrawMap[4];
+
+            //console.log(infoCat);
+
+            var sourceBox = L.control({
+                position: 'bottomleft'
+            });
+
+            sourceBox.onAdd = function () {
+
+                if (sourceBoxDiv) {
+                    sourceBoxDiv.remove('div');
+                };
+
+                sourceBoxDiv = L.DomUtil.create('div', 'sourceBox')
+
+                sourceBoxDiv.innerHTML =
+                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
+                        and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
+
+                return sourceBoxDiv;
+            };
+
+            sourceBox.addTo(map);
+
+        }
     </script>
-
 </body>
 
 </html>
