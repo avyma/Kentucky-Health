@@ -91,6 +91,7 @@
 
         h7 {
             font-family: Lato, sans-serif;
+            margin: 0px 0px 0px 0px;
             letter-spacing: 1px;
             font-size: 1.3em;
             text-transform: capitalize;
@@ -105,11 +106,21 @@
             color: #de3d26;
         }
 
+        h9 {
+            font-family: Montserrat;
+            letter-spacing: 3px;
+            font-size: 1.2em;
+            color: white;
+            text-transform: uppercase;
+            background: #de3d26;
+            padding: 5px 15px 5px 15px;
+        }
+
         #map {
             width: 100%;
             top: 12%;
             /*bottom: 0; */
-            height: 580px;
+            height: 640px;
             /*position: absolute;*/
             /*margin: 10px*/
             background: rgba(253, 117, 54, 0.8);
@@ -214,10 +225,13 @@
         }
 
         .infoBox {
-            padding: 6px 2px;
+            top: 60px;
+            width: 20pc;
+            padding: 10px 10px 10px 10px;
             font-size: 1 em;
-            background: rgba(255, 255, 255, 0.1);
-            /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); */
+            border: 2px solid rgba(129, 48, 2, 0.7);
+            background: rgba(247, 240, 236, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
         }
 
@@ -359,6 +373,7 @@
             sourceBoxDiv,
             infoBoxDiv,
             settingsDrawMap,
+            authorBoxDiv,
             optionsAnalysis = {
                 "afPrevOption": { // Atrial Fibrillation
                     "value": "afPrev", // Prevalence
@@ -743,6 +758,8 @@
 
             sourceMap(settingsDrawMap);
             infoMap(settingsDrawMap);
+            infoAut(settingsDrawMap);
+
 
             dataLayer.eachLayer(function (layer) {
                 var props = layer.feature.properties,
@@ -980,7 +997,7 @@
                 sourceBoxDiv = L.DomUtil.create('div', 'sourceBox')
 
                 sourceBoxDiv.innerHTML =
-                    `<h6>MAP BY   *  T H E  *  R I G H T  *  V U E  *</h6>Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
+                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
                         and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
 
                 return sourceBoxDiv;
@@ -993,9 +1010,10 @@
 
         function infoMap(settingsDrawMap) {
 
-            var infoBox = L.control({
-                position: 'topleft'
-            });
+            var infoCat = settingsDrawMap[5],
+                infoBox = L.control({
+                    position: 'topleft'
+                });
 
             infoBox.onAdd = function () {
 
@@ -1006,13 +1024,40 @@
                 infoBoxDiv = L.DomUtil.create('div', 'infoBox')
 
                 infoBoxDiv.innerHTML =
-                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
-            and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
+                    `<h3>Methodology</h3><p>This map depicts 3 major chronic cardiac conditions across Kentucky counties for 2017.</p>
+                    <p>Prevalence estimates are calculated by taking the beneficiaries with a particular condition
+                    divided by the total number of beneficiaries in CMS fee-for-service population, expressed as a percentage.</p>
+                    A complete description of the methodology for all the chronic condition reports can be downloaded from the link available on the chronic condition website main page..`;
 
                 return infoBoxDiv;
             };
 
             infoBox.addTo(map);
+
+        }
+
+        function infoAut(settingsDrawMap) {
+
+            var infoCat = settingsDrawMap[5],
+                sourceBox = L.control({
+                    position: 'bottomright'
+                });
+
+            sourceBox.onAdd = function () {
+
+                if (authorBoxDiv) {
+                    authorBoxDiv.remove('div');
+                };
+
+                authorBoxDiv = L.DomUtil.create('div', 'sourceBox')
+
+                authorBoxDiv.innerHTML =
+                    `<h9>MAP AUTHORED BY   *  T H E  *  R I G H T  *  V U E  *</h9>`;
+
+                return authorBoxDiv;
+            };
+
+            sourceBox.addTo(map);
 
         }
     </script>
