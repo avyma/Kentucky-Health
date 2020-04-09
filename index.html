@@ -91,7 +91,6 @@
 
         h7 {
             font-family: Lato, sans-serif;
-            margin: 0px 0px 0px 0px;
             letter-spacing: 1px;
             font-size: 1.3em;
             text-transform: capitalize;
@@ -106,26 +105,28 @@
             color: #de3d26;
         }
 
+
+
         h9 {
             font-family: Montserrat;
-            letter-spacing: 3px;
+            letter-spacing: 6px;
             font-size: 1.2em;
             color: white;
             text-transform: uppercase;
             background: #de3d26;
             padding: 5px 15px 5px 15px;
+
         }
 
         #map {
             width: 100%;
             top: 12%;
             /*bottom: 0; */
-            height: 70vh;
+            height: 640px;
             /*position: absolute;*/
             /*margin: 10px*/
             background: rgba(253, 117, 54, 0.8);
             border: 2px solid #dddedf;
-            margin: 20px auto;
         }
 
         #theList {
@@ -272,23 +273,6 @@
         }
 
         */
-
-        @media only screen and (max-width: 900px) {
-            #map {
-                width: 85%;
-                height: 70vh
-            }
-
-            h2 {
-                display: inline;
-            }
-
-            #chonicdisease {
-                background-color: #fff;
-                margin-top: 15px;
-            }
-
-        }
     </style>
 </head>
 
@@ -352,32 +336,6 @@
             <div></div>
 
         </div>
-
-        <div>
-
-            <br>
-            <br>
-            <hr>
-            <br>
-            <a href="https://newmapsplus.github.io">
-                <img src="https://newmapsplus.github.io/assets/graphics/logo-2018-nmp-75px-h-gray.png"
-                    alt="University of Kentucky Geography">
-            </a>
-
-            <a href="https://uky-gis.github.io">
-                <img src="https://newmapsplus.github.io/assets/graphics/logo-2018-geography-75px-h.png"
-                    alt="University of Kentucky Geography">
-            </a>
-        </div>
-
-        <div id="social">
-            <p><b>Social links</b></p>
-            <ul>
-                <li>GitHub: <a href="https://github.com/newmapsplus">New Maps Plus</a></li>
-                <li>Twitter: <a href="https://twitter.com/NewMapsPlus">@NewMapsPlus</a></li>
-                <li>Portfolio: <a href='#'>mapping portfolio</a>.</li>
-            </ul>
-        </div>
     </footer>
 
 
@@ -414,10 +372,8 @@
 
 
         var legendDiv,
-            sourceBoxDiv,
-            infoBoxDiv,
             settingsDrawMap,
-            authorBoxDiv,
+            infoBoxDiv,
             optionsAnalysis = {
                 "afPrevOption": { // Atrial Fibrillation
                     "value": "afPrev", // Prevalence
@@ -478,8 +434,31 @@
                     "cat": "expenditure per capita"
 
                 }
-            };
+            },
 
+            mapDataDesign = {
+
+                "sourceData": {
+                    "mapText": "Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>) and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)",
+                    "mapPost": "bottomleft",
+                    "mapPop": "false",
+                    "mapDiv": "sourceBox"
+                },
+
+                "authorData": {
+                    "mapText": "<h9>MAP BY   *  T H E  *  R I G H T  *  V U E  *</h9>",
+                    "mapPost": "bottomright",
+                    "mapPop": "false",
+                    "mapDiv": "sourceBox"
+                },
+
+                "methodDataPrev": {
+                    "mapText": "<h3>Methodology</h3><p>This map depicts 3 major chronic cardiac conditions across Kentucky counties for 2017.</p><p>Prevalence estimates are calculated by taking the beneficiaries with a particular condition divided by the total number of beneficiaries in CMS fee-for-service population, expressed as a percentage.</p> A complete description of the methodology for all the chronic condition reports can be downloaded from the link available on the chronic condition website main page.",
+                    "mapPost": "topleft",
+                    "mapPop": "true",
+                    "mapDiv": "infoBox"
+                }
+            };
 
         var options = {
             zoomSnap: .1,
@@ -538,9 +517,6 @@
 
             dataLayer.addTo(map)
 
-
-
-
             //   drawMap functions using 2 default arguments (one is array)
             //   Atrial_Fibrillation_Prev layer drawn first - as a default map (when page loads)
             var beginDraw = ["Atrial_Fibrillation_Prev", "%", "8.4", "8.4", "Atrial Fibrillation",
@@ -559,12 +535,18 @@
             drawTable(data, optionSelect);
             // console.log(settingsDrawMap[4]);
 
+            infoMap(optionSelect, infoBoxDiv); // Experiment
+
+
             // listen for change in select element. When change occurs, draw new map and table
             $("select").change(function () {
 
                 optionSelect = $("select").val()
-                drawTable(data, optionSelect)
 
+                infoBoxDiv = 'null';
+
+                drawTable(data, optionSelect)
+                infoMap(optionSelect, infoBoxDiv);
 
                 // drawTable returns values that can be used to draw the new map
                 drawMap(dataLayer, settingsDrawMap);
@@ -583,7 +565,7 @@
             //$("#theList").children().empty();
             // console.log("after", $("#theList"));
             /****/
-            // Good find!
+
             $("#theList").empty();
 
             // Add the data div's
@@ -630,49 +612,55 @@
                 for (i = 0; i < length; i++) {
                     while (i < 20) {
 
-                        $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
                     while (i >= 20 && i < 40) {
 
-                        $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
                     while (i >= 40 && i < 60) {
 
-                        $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
                     while (i >= 60 && i < 80) {
 
-                        $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
                     while (i >= 80 && i < 100) {
 
-                        $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
                     while (i >= 100 && i < 120) {
 
-                        $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " + (ky[
-                                i]
-                            .properties[eval]).toLocaleString() + catSymb + "<br>");
+                        $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " + (ky[
+                                    i]
+                                .properties[eval]).toLocaleString() + catSymb + "<br>");
                         i++
                     }
 
@@ -680,7 +668,8 @@
 
                 // create h1 element and add the statewide percentage
                 $("#theList").prepend("<h2>" + tblText + "</h2><h5> - " + category +
-                    "</h5><h6>National Average: " + natAvg + catSymb + ";          State Average: " + stAvg +
+                    "</h5><h6>National Average: " + natAvg + catSymb + ";          State Average: " +
+                    stAvg +
                     catSymb +
                     "</h6><h3>County rank</h3>");
 
@@ -690,7 +679,8 @@
                 for (i = 0; i < length; i++) {
                     while (i < 20) {
 
-                        $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(0).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -698,7 +688,8 @@
 
                     while (i >= 20 && i < 40) {
 
-                        $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(1).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -706,7 +697,8 @@
 
                     while (i >= 40 && i < 60) {
 
-                        $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(2).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -714,7 +706,8 @@
 
                     while (i >= 60 && i < 80) {
 
-                        $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(3).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -722,7 +715,8 @@
 
                     while (i >= 80 && i < 100) {
 
-                        $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(4).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -730,7 +724,8 @@
 
                     while (i >= 100 && i < 120) {
 
-                        $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME + ": " +
+                        $("#theList").children("div").eq(5).append((i + 1) + ". " + ky[i].properties.NAME +
+                            ": " +
                             catSymb +
                             (parseInt(ky[i].properties[eval])).toLocaleString() + "<br>");
                         i++
@@ -777,6 +772,8 @@
         // function drawMap(dataLayer, attributes, text) {
         function drawMap(dataLayer, settingsDrawMap) {
 
+            //console.log(mapDataDesign);
+
             var attributes = settingsDrawMap[0],
                 symbol = settingsDrawMap[1],
                 avgStKY = settingsDrawMap[2],
@@ -796,13 +793,11 @@
             //var breaks = getClassBreaks(dataLayer, settingsDrawMap);
 
 
+            //infoMap(settingsDrawMap);
+
             drawLegend(breaks, settingsDrawMap); // (b) call drawLegend function 
             //Arguments: breaks - defined in the getClassBreaks function
             //Arguments: popuptext --> "Prevalence" or "Spending per Capita"
-
-            sourceMap(settingsDrawMap);
-            infoMap(settingsDrawMap);
-            infoAut(settingsDrawMap);
 
 
             dataLayer.eachLayer(function (layer) {
@@ -972,7 +967,8 @@
                 legendDiv = L.DomUtil.create('div', 'legend'); // <div> element and 'legend' class defined
 
 
-                legendDiv.innerHTML = `<h3>${text}</h3><h7>${subText} (${symbol})<br></h7><br>`; // Title of Legend
+                legendDiv.innerHTML =
+                    `<h3>${text}</h3><h7>${subText} (${symbol})<br></h7><br>`; // Title of Legend
 
 
                 /*___________________________ A. ASSIGN COLORS TO CLASS BREAKS: Prevalence (%) or Cost/Capita ($) ___________________________*/
@@ -1026,85 +1022,40 @@
     
     */
 
-        function sourceMap(settingsDrawMap) {
 
-            var sourceBox = L.control({
-                position: 'bottomleft'
-            });
+        function infoMap(optionSelect, infoBoxDiv) {
 
-            sourceBox.onAdd = function () {
-
-                if (sourceBoxDiv) {
-                    sourceBoxDiv.remove('div');
-                };
-
-                sourceBoxDiv = L.DomUtil.create('div', 'sourceBox')
-
-                sourceBoxDiv.innerHTML =
-                    `Source:Center for Medicare & Medicaid Services (<a href=https://www.cms.gov/> https://www.cms.gov</a>)
-                        and the US Census Cartographic Boundary Shapefiles (<a href =https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html>www.census.gov</a>)`;
-
-                return sourceBoxDiv;
+            if (infoBoxDiv) {
+                infoBoxDiv.remove('div');
             };
 
-            sourceBox.addTo(map);
+            for (var item in mapDataDesign) {
+                var
+                    txtMap = mapDataDesign[item].mapText,
+                    posMap = mapDataDesign[item].mapPost,
+                    divMap = mapDataDesign[item].mapDiv;
 
-        }
-
-
-        function infoMap(settingsDrawMap) {
-
-            var infoCat = settingsDrawMap[5],
-                infoBox = L.control({
-                    position: 'topleft'
+                boxMap = L.control({
+                    position: `${posMap}`
                 });
 
-            infoBox.onAdd = function () {
+                boxMap.onAdd = function () {
 
-                if (infoBoxDiv) {
-                    infoBoxDiv.remove('div');
+                    infoBoxDiv = L.DomUtil.create('div', `${divMap}`)
+
+                    infoBoxDiv.innerHTML = `${txtMap}`;
+
+                    return infoBoxDiv;
+
                 };
-
-                infoBoxDiv = L.DomUtil.create('div', 'infoBox')
-
-                infoBoxDiv.innerHTML =
-                    `<h3>Methodology</h3><p>This map depicts 3 major chronic cardiac conditions across Kentucky counties for 2017.</p>
-                    <p>Prevalence estimates are calculated by taking the beneficiaries with a particular condition
-                    divided by the total number of beneficiaries in CMS fee-for-service population, expressed as a percentage.</p>
-                    A complete description of the methodology for all the chronic condition reports can be downloaded from the link available on the chronic condition website main page..`;
-
-                return infoBoxDiv;
+                boxMap.addTo(map);
             };
 
-            infoBox.addTo(map);
 
-        }
-
-        function infoAut(settingsDrawMap) {
-
-            var infoCat = settingsDrawMap[5],
-                sourceBox = L.control({
-                    position: 'bottomright'
-                });
-
-            sourceBox.onAdd = function () {
-
-                if (authorBoxDiv) {
-                    authorBoxDiv.remove('div');
-                };
-
-                authorBoxDiv = L.DomUtil.create('div', 'sourceBox')
-
-                authorBoxDiv.innerHTML =
-                    `<h9>MAP AUTHORED BY   *  T H E  *  R I G H T  *  V U E  *</h9>`;
-
-                return authorBoxDiv;
-            };
-
-            sourceBox.addTo(map);
 
         }
     </script>
+
 </body>
 
 </html>
