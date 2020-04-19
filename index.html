@@ -535,7 +535,7 @@
             drawTable(data, optionSelect);
             // console.log(settingsDrawMap[4]);
 
-            infoMap(optionSelect, infoBoxDiv); // Experiment
+            infoMap(infoBoxDiv); // This works. Don't DELETE
 
 
             // listen for change in select element. When change occurs, draw new map and table
@@ -543,12 +543,14 @@
 
                 optionSelect = $("select").val()
 
-                infoBoxDiv = 'null';
+
+
+                //infoMap(infoBoxDiv); // This doesn't work
 
                 drawTable(data, optionSelect)
 
                 // drawTable returns values that can be used to draw the new map
-                drawMap(dataLayer, settingsDrawMap);
+                drawMap(dataLayer, settingsDrawMap, infoBoxDiv);
 
 
             })
@@ -780,10 +782,7 @@
                 text = settingsDrawMap[4],
                 catCon = settingsDrawMap[5];
 
-            //console.log(catCon);
 
-            //console.log(text);
-            //console.log(attributes);
 
 
             /*_________________________________________A. Map Counties ___________________________________________*/
@@ -792,11 +791,12 @@
             //var breaks = getClassBreaks(dataLayer, settingsDrawMap);
 
 
-            //infoMap(settingsDrawMap);
+
 
             drawLegend(breaks, settingsDrawMap); // (b) call drawLegend function 
             //Arguments: breaks - defined in the getClassBreaks function
             //Arguments: popuptext --> "Prevalence" or "Spending per Capita"
+
 
 
             dataLayer.eachLayer(function (layer) {
@@ -1024,15 +1024,16 @@
 
         function infoMap(optionSelect, infoBoxDiv) {
 
-            if (infoBoxDiv) {
-                infoBoxDiv.remove('div');
-            };
+            //$('#sourceBox').remove();
+            //$('#infoBox').remove();
 
             for (var item in mapDataDesign) {
                 var
                     txtMap = mapDataDesign[item].mapText,
                     posMap = mapDataDesign[item].mapPost,
                     divMap = mapDataDesign[item].mapDiv;
+
+                console.log(divMap);
 
                 boxMap = L.control({
                     position: `${posMap}`
@@ -1048,9 +1049,8 @@
 
                 };
                 boxMap.addTo(map);
+
             };
-
-
 
         }
     </script>
