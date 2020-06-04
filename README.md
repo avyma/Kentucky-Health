@@ -53,7 +53,7 @@ The anticipated methods of thematic representation will essentially be chorolple
     - The map allow selection of classifications: (i) urban; (ii) rural; and (iii) all through the use of radio-button
     - The map includes a drop-down menu for selections: (i) Prevalence; and (ii) Expenditure per capita
 
-The mock-ups can be found the [Wireframe Folder](../kentucky-health/Wireframes) in this repositories. The updated wireframe is shown below:
+The mock-ups can be found the [Wireframe Folder](Wireframes) in this repositories. The updated wireframe is shown below:
 
 ![Wireframe-Module 7](Wireframes/Wireframe_Module7.jpg)
 *Wireframe-Module 7.*
@@ -63,7 +63,7 @@ This mapping project is ongoing. I will continue to update this document. Meanwh
 ## Technology Stack
 - QGIS will be the primary tool for data and information processing. Other tools for file conversions will be [Mapshaper](https://mapshaper.org) and [geojson.io](geojson.io).
 - The map will predominantly be drawn with d3.js taking advantage of the robust capability to asynchronous call file.
-- [MapBox Swipe GL](../Kentucky-Health/Samples/index_mapbox.html) will be used
+- [MapBox Swipe GL](Samples/index_mapbox.html) will be used
 
 ## Appendix
 - [Affects of Social Determinants on Heart Disease](https://1drv.ms/v/s!Al_WACz_cvVTgqBElxHVA02kyjGGDA?e=WaVuZO) - Version May 25, 2020
