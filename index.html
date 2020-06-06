@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Kentucky - Heart Disease</title>
+  <title>Kentucky - Chronic Heart Conditions</title>
 
   <!-- Bootstrap CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -57,7 +57,37 @@
       <div class="tab-pane fade show active" id="AF">
         <section class="row bg-secondary">
           <div class="col-12 col-md-7 col-lg-8 px-0">
-            <div id="AFmap" class="bg-light position-relative"></div>
+            <div id="AFmap" class="bg-light position-relative">
+              <!-- Rectangular control panel - <div id#cpanel></div> goes here-->
+              <!-- See this link: https://1drv.ms/u/s!Al_WACz_cvVTgqxF4czd473BB09Cww?e=eREx96  -->
+              <fieldset>
+                <!-- <legend>Custom forms</legend> -->
+                <div class="form-group">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="radioAll" name="customRadio" class="custom-control-input" checked="">
+                    <label class="custom-control-label" for="radioAll">All</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="radioRural" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="radioRural">Rural</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="radioUrban" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="radioUrban">Urban</label>
+                  </div>
+                </div>
+                
+                <div id="ui" class="dropdown">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    All facilities
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+                </div>
+                
+              </fieldset>
+
+            </div>
           </div>
           <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
             <h5>Atrial Fibrilation</h5>
